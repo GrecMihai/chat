@@ -39,6 +39,7 @@ container.resolve(function(users, _){
   function ConfigureExpress(app){
 
     require('./passport/passport-local');
+    require('./passport/passport-facebook');
 
     app.use(express.static('public'));//express will make use of every static file in the public folder
     app.use(cookieParser());//allow us to save cookies in the browser
