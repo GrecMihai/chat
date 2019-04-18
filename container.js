@@ -7,7 +7,10 @@ const container = dependable.container();
 const myModules = [
   ['_','lodash'],//aici vin si restul modulelor, separate cu virgula
   ['mongoose', 'mongoose'],
-  ['passport', 'passport']
+  ['passport', 'passport'],
+  ['formidable','formidable'],
+  ['Club', './models/clubs'],
+  ['aws', './helpers/AWSUpload']
 ];
 
 myModules.forEach(function(val){
