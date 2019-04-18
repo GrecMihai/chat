@@ -2,15 +2,14 @@ const mongoose = require('mongoose');//altfel nu merge cu passport
 const bcrypt = require('bcrypt-nodejs');
 //asa va arata in baza de date Userul
 const userSchema = mongoose.Schema({
-  username: {type: String, unique: true},
-  fullname: {type: String, unique: true, default: ''},
-  email: {type: String, unique: true},
+  username: {type: String},
+  fullname: {type: String},
+  email: {type: String},
   password: {type: String, default: ''},
   userImage: {type:String, default: 'default.png'},
   facebook: {type: String, default: ''},
   fbTokens: Array,
   google: {type: String, default: ''},
-  googleTokens: Array
 });
 
 //encrypt the password before put it in the DB

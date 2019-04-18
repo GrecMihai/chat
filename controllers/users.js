@@ -8,6 +8,8 @@ module.exports = function(_, passport, User){
        router.get('/home', this.homePage);
        router.get('/auth/facebook', this.getFacebookLogin);
        router.get('/auth/facebook/callback', this.facebookLogin);
+       router.get('/auth/google', this.getGoogleLogin);
+       router.get('/auth/google/callback', this.googleLogin);
 
        router.post('/', User.LoginValidation,this.postLogin);
        router.post('/signup', User.SignUpValidation, this.postSignUp);
@@ -36,6 +38,15 @@ module.exports = function(_, passport, User){
        scope: 'email'
      }),
      facebookLogin: passport.authenticate('facebook',{
+       successRedirect: '/home',
+       failureRedirect: '/signup',
+       failureFlash: true//momentan nu se afiseaza nimic ca nu ai trimis mesaje, dar poate te razgandesti
+     }),
+     getGoogleLogin: passport.authenticate('google', {
+       //daca foloseai ['profile', 'email'], nu ti'ar fi cerut permisiunea sa te loghezi, te'ar fi logat automat, iar URL urile sunt inlocuitoare pt cele 2
+       scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read']
+     }),
+     googleLogin: passport.authenticate('google',{
        successRedirect: '/home',
        failureRedirect: '/signup',
        failureFlash: true//momentan nu se afiseaza nimic ca nu ai trimis mesaje, dar poate te razgandesti
