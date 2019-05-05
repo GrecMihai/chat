@@ -11,7 +11,9 @@ const myModules = [
   ['formidable','formidable'],
   ['async', 'async'],
   ['Club', './models/clubs'],
+  ['Users', './models/user'],
   ['aws', './helpers/AWSUpload']
+
 
 ];
 

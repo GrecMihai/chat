@@ -38,6 +38,7 @@ passport.use(new FacebookStrategy({
     //save the data in the DB
     const newUser = new User();
     newUser.facebook = profile.id;
+    newUser.username = profile.displayName;//FACE ASTA CA SA NU FIE EMPTY
     newUser.fullname = profile.displayName;
     newUser.email = profile._json.email;
     newUser.userImage = 'https://graph.facebook.com/'+profile.id+'/picture?type=large';

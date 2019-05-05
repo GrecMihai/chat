@@ -10,6 +10,18 @@ const userSchema = mongoose.Schema({
   facebook: {type: String, default: ''},
   fbTokens: Array,
   google: {type: String, default: ''},
+  sentRequest: [{
+    username: {type: String, default: ''}
+  }],
+  request: [{
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    username: {type: String, default: ''}
+  }],
+  friendsList: [{
+    friendId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    friendName: {type: String, default: ''}
+  }],
+  totalRequest: {type: Number, default: 0}
 });
 
 //encrypt the password before put it in the DB

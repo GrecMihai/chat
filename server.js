@@ -10,10 +10,12 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 const flash = require('connect-flash');//allow us to display flash messages
 const passport = require('passport');
+const socketIO = require('socket.io');
+const {Users} = require('./helpers/UsersClass');//asa se face la clase
 
 const container = require('./container');
 
-container.resolve(function(users, _, admin, home){
+container.resolve(function(users, _, admin, home, group){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
   mongoose.connect('mongodb://localhost/chat');//added path to the database
@@ -24,16 +26,22 @@ container.resolve(function(users, _, admin, home){
     //ciudata abordare, ai putea sa faci direct fara functia aia de mai sus
     const app = express();
     const server = http.createServer(app);
+    const io = socketIO(server);
+
     server.listen(3000, function(){
       console.log('Server listening on port 3000');
     });
     ConfigureExpress(app);
+
+    require('./socket/groupchat')(io, Users);
+    require('./socket/friend')(io);
 
     //Setup router
     const router = require('express-promise-router')();
     users.SetRouting(router);
     admin.SetRouting(router);
     home.SetRouting(router);
+    group.SetRouting(router);
     app.use(router);
 
   }

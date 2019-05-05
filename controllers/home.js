@@ -36,7 +36,7 @@
          }
          const countrySort = _.sortBy(res2, '_id');//sorting the countries
 
-         res.render('home', {title: 'Chat - Home', data: dataChunk, country: countrySort});
+         res.render('home', {title: 'Chat - Home', user:req.user, data: dataChunk, country: countrySort});
        })
      }
    }
