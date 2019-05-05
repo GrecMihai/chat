@@ -12,10 +12,11 @@ const flash = require('connect-flash');//allow us to display flash messages
 const passport = require('passport');
 const socketIO = require('socket.io');
 const {Users} = require('./helpers/UsersClass');//asa se face la clase
+const {Global} = require('./helpers/Global');
 
 const container = require('./container');
 
-container.resolve(function(users, _, admin, home, group){
+container.resolve(function(users, _, admin, home, group, results){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
   mongoose.connect('mongodb://localhost/chat');//added path to the database
@@ -35,6 +36,7 @@ container.resolve(function(users, _, admin, home, group){
 
     require('./socket/groupchat')(io, Users);
     require('./socket/friend')(io);
+    require('./socket/globalroom')(io, Global, _);
 
     //Setup router
     const router = require('express-promise-router')();
@@ -42,6 +44,7 @@ container.resolve(function(users, _, admin, home, group){
     admin.SetRouting(router);
     home.SetRouting(router);
     group.SetRouting(router);
+    results.SetRouting(router);
     app.use(router);
 
   }

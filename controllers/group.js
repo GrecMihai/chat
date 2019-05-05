@@ -3,6 +3,7 @@ module.exports = function(Users, async){
     SetRouting: function(router){
       router.get('/group/:name', this.groupPage);//name va fi diferit pt fiecare jucator
       router.post('/group/:name', this.groupPostPage);
+      router.get('/logout', this.logout);
     },
     groupPage: function(req, res){
       const name =  req.params.name;//name pt ca ai :name mai sus
@@ -140,6 +141,12 @@ module.exports = function(Users, async){
         }
       ], (err, results) => {
         res.redirect('/group/' + req.params.name);
+      });
+    },
+    logout: function(req, res){
+      req.logout();//log the user out(metoda poate fi utilizata pt ca avem passport)
+      req.session.destroy((err) => {
+        res.redirect('/');
       });
     }
   }
