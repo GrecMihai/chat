@@ -12,7 +12,7 @@ module.exports = function(async, Club){
         function(callback){
           const regex = new RegExp((req.body.country), 'gi');
           //prin or de mai jos il lasa sa caute ori dupa country ori dupa name, pt ca si filter si si bara de search au acelasi post method, si poate vrei sa cauti aici dupa nume, nu tara
-          Club.find({'$or': [{'country':regex}, {'name':regex}]}, (err, result) => {
+          Club.find({'$or': [{'country':regex}, {'name':regex}, {'sport':regex}]}, (err, result) => {
             callback(err, result);
           })
         }

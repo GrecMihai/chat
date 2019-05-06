@@ -17,6 +17,7 @@ module.exports = function(formidable, Club, aws){
         newClub.name = req.body.club;//le ia din ceva atribut(name) din ejs
         newClub.country = req.body.country;
         newClub.image = req.body.upload;
+        newClub.sport = req.body.sport;
         newClub.save((err) => {
           res.render('admin/dashboard');//va trebui sa afisezi si ceva mesaje
         })

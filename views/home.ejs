@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tennis Chat - Home</title>
+    <title>SPORTbabble - Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                                         </p>
                                         <hr/>
                                         <select class="form-control" name="country" id="country" >
-                                            <option value="">Filter By Country</option>
+                                            <option value="">Filter By Sport</option>
 											                          <% _.forEach(country, function(value) { %>
                                                   <option value="<%= value._id %>"><%= value._id %></option>
                                                 <%}) %>
@@ -78,18 +78,26 @@
                                               <div class="row">
                                                   <div class="col-xs-12 col-md-6">
                                                       <p>
-                                                          <%= val2.country%>
+                                                        <%= val2.country%>
+
+                                                      </p>
+                                                      <p>
+                                                        <%= val2.sport%>
                                                       </p>
                                                   </div>
+
+
 
                                                   <div class="col-xs-12 col-md-6">
                                                     <input type="hidden" name="id" id="id" value="<%= val2._id %>">
                                                     <input type="hidden" name="clubName" id="clubName" value="<%= val2.name %>">
+
                                                       <button class="btn add-fav">
                                                           Add To Favorite
                                                       </button>
                                                   </div>
                                               </div>
+
                                           </div>
                                       </div>
                                   </a>

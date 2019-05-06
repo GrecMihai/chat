@@ -21,7 +21,7 @@
          function(callback){
            Club.aggregate([{
              $group: {
-               _id: "$country"
+               _id: "$sport"
              }
            }], (err, newResult) => {
              callback(err, newResult);
