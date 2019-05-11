@@ -18,7 +18,7 @@ module.exports = function(Users, async){
         }
       ], (err, results) => {
         const result1 = results[0];
-        res.render('groupchat/group', {title: 'Tennis Chat - Group', user:req.user, groupName:name, data:result1});
+        res.render('groupchat/group', {title: 'SPORTbabble - Group', user:req.user, groupName:name, data:result1});
       });
     },
     groupPostPage: function(req, res){

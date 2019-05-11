@@ -55,5 +55,5 @@ $(document).ready(function(){
       //to clear the input field, ceva
       $('#msg').val('');
     });
-  })
+  });
 });
