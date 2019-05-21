@@ -15,6 +15,12 @@ $(document).ready(function(){
       room2: paramTwo
     }
     socket.emit('join PM', params);
+
+
+    socket.on('message display', function(){
+      $('#reload').load(location.href + ' ' + '#reload');
+    });
+    
   });
 
 socket.on('new message', function(data){
@@ -40,6 +46,20 @@ socket.on('new message', function(data){
         $('#msg').val('');//clear the input field
       });
     }
+  });
+  //face vrajeala asta pt a salva mesajul cand se apasa pe Send, da ii acelasi lucru ca si cum ar fi pus functionalitatea mai sus, in form.submit, pt ca se declanseaza deodata
+  $('#send-message').on('click', function(){
+    var message = $('#msg').val();
+    $.ajax({
+      url: '/chat/' + paramOne,
+      type: 'POST',
+      data: {
+        message: message
+      },
+      success: function(){
+        $('#msg').val('');
+      }
+    });
   });
 });
 //value_1 si value_2 is indecsi, pur si simplu vrea sa le inverseze

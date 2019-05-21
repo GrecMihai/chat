@@ -1,4 +1,4 @@
-module.exports = function(Users, async){
+module.exports = function(Users, async, Message, FriendResult, Group){
   return {
     SetRouting: function(router){
       router.get('/group/:name', this.groupPage);//name va fi diferit pt fiecare jucator
@@ -15,132 +15,68 @@ module.exports = function(Users, async){
             .exec((err, result) => {
               callback(err, result);
             });
+        },
+        function(callback){
+          const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
+          Message.aggregate(
+            {$match:{$or:[{'senderName':nameRegex},
+            {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
+            {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
+            {
+              $group:{"_id":{
+                //this is a message that we create
+                "last_message_between":{
+                  $cond:[
+                    {
+                      $gt:[//get the sender and receiver name
+                        {$substr:["$senderName", 0, 1]},
+                        {$substr:["$receiverName", 0, 1]}]
+                    },
+                      {$concat:["$senderName"," and ","$receiverName"]},
+                      {$concat:["$receiverName"," and ","$senderName"]}
+                  ]
+                }
+              }, "body":{$first:"$$ROOT"}
+              }
+            }, function(err, newResult){
+              callback(err, newResult);
+            }
+          )
+        },
+        function(callback){
+          Group.find({})
+            .populate('sender')
+            .exec((err, result) => {
+              callback(err, result);
+            });
         }
       ], (err, results) => {
         const result1 = results[0];
-        res.render('groupchat/group', {title: 'SPORTbabble - Group', user:req.user, groupName:name, data:result1});
+        const result2 = results[1];
+        const result3 = results[2];
+        console.log(result3);
+        res.render('groupchat/group', {title: 'SPORTbabble - Group', user:req.user, groupName:name, data:result1, chat:result2, groupMsg: result3});
       });
     },
     groupPostPage: function(req, res){
-      //here you will post the data to the database(sending the friend request)
-      async.parallel([
-        //for receiver
-        function(callback){
-          if(req.body.receiverName){
-            //update the collection for the receiver
-            Users.update({
-              'username': req.body.receiverName,//look for a collection that has that Username
-              'request.userId': {$ne: req.user._id},//ne inseamna not equal, _id e id'ul celui ce trimite, prin asta verifica ca nu s'a trimis deja cerere sau ca ei nu sunt deja prieteni
-              'friendsList.fiendId' : {$ne: req.user._id},//aici verifica sa nu fie prieteni de fapt
+      FriendResult.PostRequest(req, res, '/group/'+req.params.name);
 
-            },
-              {
-                $push: {request: {
-                  userId: req.user._id,
-                  username: req.user.username
-                }},
-                $inc: {totalRequest: 1}
-              }, (err, count) => {
-                callback(err, count);
-              })
-          }
-        },
-        //for sender
+      async.parallel([
         function(callback){
-          if(req.body.receiverName){
-            Users.update({
-              'username': req.user.username,//verificam sa fie userul care trebuie
-              'sentRequest.username': {$ne: req.body.receiverName}//sa verificam ca nu s'a tirmis deja o cerere si baiatu celalant nu a acceptat'o
-            },{//push the data here
-              $push: {sentRequest: {
-                username: req.body.receiverName
-              }}
-            }, (err, count) => {
-              callback(err, count);
+          if(req.body.message){
+            const group = new Group();
+            group.sender = req.user._id;//logged in user
+            group.body = req.body.message;
+            group.name = req.body.groupName;
+            group.createdAt = new Date();
+
+            group.save((err, msg) => {
+              callback(err, msg);
             })
           }
         }
       ], (err, results) => {
-        res.redirect('/group/'+req.params.name);//il trimiti inapoi la grup
-      });
-
-      //accepting and cancelling the friend request
-      async.parallel([
-        //CLICK ON ACCEPT
-        //update the document for the receiver request
-        function(callback){
-          if(req.body.senderId){
-            Users.update({
-              '_id': req.user._id,
-              'friendsList.friendId' : {$ne: req.body.senderId}
-            },{//add to the friends list
-              $push: {friendsList: {
-                friendId: req.body.senderId,
-                friendName: req.body.senderName
-              }},//delete the request
-              $pull: {request: {
-                userId: req.body.senderId,
-                username: req.body.senderName
-              }},//decrement the totalRequest
-              $inc: {totalRequest: -1}
-            }, (err, count) => {
-              callback(err, count);
-            });
-          }
-        },
-        //update the document for the sender request
-        function(callback){
-          if(req.body.senderId){
-            Users.update({
-              '_id': req.body.senderId,
-              'friendsList.friendId' : {$ne: req.user._id}
-            },{//add to the friends list
-              $push: {friendsList: {
-                friendId: req.user._id,
-                friendName: req.user.username
-              }},//delete the request
-              $pull: {sentRequest: {
-                username: req.user.username
-              }}
-            }, (err, count) => {
-              callback(err, count);
-            });
-          }
-        },
-        //CANCEL THE REQUEST
-        //receiver
-        function(callback){
-          if(req.body.user_Id){
-            Users.update({
-              '_id': req.user._id,
-              'request.userId' : {$eq: req.body.user_Id}
-            },{//delete the request
-              $pull: {request: {
-                userId: req.body.user_Id
-              }},
-              $inc: {totalRequest: -1}
-            }, (err, count) => {
-              callback(err, count);
-            });
-          }
-        },
-        //sender
-        function(callback){
-          if(req.body.user_Id){
-            Users.update({
-              '_id': req.body.user_Id,
-              'sentRequest.username' : {$eq: req.user.username}
-            },{//delete the request
-              $pull: {sentRequest: {
-                username: req.user.username
-              }}
-            }, (err, count) => {
-              callback(err, count);
-            });
-          }
-        }
-      ], (err, results) => {
-        res.redirect('/group/' + req.params.name);
+        res.redirect('/group/'+req.params.name);
       });
     },
     logout: function(req, res){

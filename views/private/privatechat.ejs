@@ -111,18 +111,33 @@
                             <div class="chat_area">
                                 <ul id="messages" class="list-unstyled">
                                   <!-- utilizat pentru a afisa mesajele din baza de date-->
-                                  <!--
+                                  <% if(chats.length > 0){ %>
+                                  <% _.forEach(chats, function(val){ %>
+                                  <% if(name === val.receiver.username){%>
                                   <li class="left">
                                     <span class="chat-img1 pull-left">
                                       <img src="http://placehold.it/300x300" class="img-circle" alt="">
                                     </span>
                                     <div class="chat-body1">
-                                      <span class="chat-name">Username</span>
+                                      <span class="chat-name"><%= val.senderName %></span>
                                       <br>
-                                      Message Body
+                                      <%= val.message %>
                                     </div>
                                   </li>
-                                -->
+                                  <% } else if(name === val.sender.username){  %>
+                                  <li class="left">
+                                    <span class="chat-img1 pull-left">
+                                      <img src="http://placehold.it/300x300" class="img-circle" alt="">
+                                    </span>
+                                    <div class="chat-body1">
+                                      <span class="chat-name"><%= val.senderName %></span>
+                                      <br>
+                                      <%= val.message %>
+                                    </div>
+                                  </li>
+                                  <% } %>
+                                <% }) %>
+                                <% } %>
                                 </ul>
                                 <!-- Util pt a afisa mesajele ce se scriu dupa ce se apasa enter-->
                                 <script id="message-template" type="text/template">
@@ -165,6 +180,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/privatechat/pm.js"></script>
+<script src="/js/messagelink.js"></script>
 <script src="/js/group/sendRequest.js"></script>
 <script src="/js/global.js"></script>
 <script src="/js/deparam.js"></script>

@@ -13,7 +13,12 @@ module.exports = function(io){
         sender: message.sender
       });
 
+      io.emit('message display', {});
+
       callback();//asta se face pt ca dincolo tu ai si un callback, si daca nu faci asta aici ala nu va fi apelat
+    });
+    socket.on('refresh', function(){
+      io.emit('new refresh', {});
     });
   });
 }

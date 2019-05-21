@@ -103,7 +103,7 @@
                             <div class="new_message_head">
                                 <div class="pull-left">
                                 <button class="club_name">
-                                  <%= groupName %>
+                                  <%= groupName.replace(/-/g, " ") %>
                                 </button>
                                 </div>
                                 <div class="pull-right">
@@ -113,18 +113,22 @@
                             <div class="chat_area">
                                 <ul id="messages" class="list-unstyled">
                                   <!-- utilizat pentru a afisa mesajele din baza de date-->
-                                  <!--
+                                  <% if(groupMsg.length > 0 ){%>
+                                  <% _.forEach(groupMsg, function(val){%>
+                                  <% if(val.name === groupName.replace(/-/g, " ")){%>
                                   <li class="left">
                                     <span class="chat-img1 pull-left">
                                       <img src="http://placehold.it/300x300" class="img-circle" alt="">
                                     </span>
                                     <div class="chat-body1">
-                                      <span class="chat-name">Username</span>
+                                      <span class="chat-name"><%= val.sender.username %></span>
                                       <br>
-                                      Message Body
+                                      <%= val.body %>
                                     </div>
                                   </li>
-                                -->
+                                  <% } %>
+                                  <% }) %>
+                                  <% } %>
                                 </ul>
                                 <!-- Util pt a afisa mesajele ce se scriu dupa ce se apasa enter-->
                                 <script id="message-template" type="text/template">
@@ -143,7 +147,7 @@
 
                             <div class="message_write">
                               <form id="message-form" method="post">
-                                  <input type="hidden" id="groupName" value="<%= groupName%>"> <!-- Ca sa transmiti numele grupului, astfel incat fiecare canal cu grupul lui-->
+                                  <input type="hidden" id="groupName" name="groupName" value="<%= groupName%>"> <!-- Ca sa transmiti numele grupului, astfel incat fiecare canal cu grupul lui-->
                                   <input type="hidden" id="sender" name="sender" value="<%= user.username%>">
                                   <textarea class="form-control" name="message" id="msg" placeholder="Type a message"></textarea>
                                   <div class="clearfix"></div>
@@ -221,10 +225,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/messagelink.js"></script>
 <script src="/js/group/groupchat.js"></script>
 <script src="/js/group/sendRequest.js"></script>
 <script src="/js/global.js"></script>
+<script src="/js/deparam.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+
 
 </body>
 

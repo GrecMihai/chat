@@ -55,5 +55,17 @@ $(document).ready(function(){
       //to clear the input field, ceva
       $('#msg').val('');
     });
+    $.ajax({
+      url: '/group/'+room,
+      type: 'POST',
+      data: {
+        message: msg,
+        groupName: room.replace(/-/g, " "),
+      },
+      success: function(){
+        $('#msg').val('');
+      }
+    })
+
   });
 });
