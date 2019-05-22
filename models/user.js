@@ -21,7 +21,13 @@ const userSchema = mongoose.Schema({
     friendId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     friendName: {type: String, default: ''}
   }],
-  totalRequest: {type: Number, default: 0}
+  totalRequest: {type: Number, default: 0},
+  gender: {type: String, default:''},
+  country: {type: String, default: ''},
+  mantra: {type:String, default: ''},
+  favPlayers: [{
+    playerName: {type: String}
+  }]
 });
 
 //encrypt the password before put it in the DB
