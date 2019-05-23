@@ -27,6 +27,7 @@
                 </div>
             </div>
             <div class="col-md-12">
+
                 <% if(chat.length > 0) {%>
                 <% _.forEach(chat, function(val){ %>
                 <% if(user.username !== val.body.senderName && val.body.isRead === false){ %>
@@ -34,7 +35,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <p class="text-center">
-                           <img src="https://placehold.it/300x300" class="img-circle img-responsive dropdown-img" />
+                           <img src="https://grecmihaibucket.s3.amazonaws.com/<%= val.body.sender.userImage %>" class="img-circle img-responsive dropdown-img" />
                         </p>
                     </div>
                     <div class="col-md-9 pleft-0">
@@ -61,7 +62,7 @@
                   <div class="row">
                       <div class="col-md-3">
                           <p class="text-center">
-                             <img src="https://placehold.it/300x300" class="img-circle img-responsive dropdown-img" />
+                             <img src="https://grecmihaibucket.s3.amazonaws.com/<%= val.body.receiver.userImage %>" class="img-circle img-responsive dropdown-img" />
                           </p>
                       </div>
                       <div class="col-md-9 pleft-0">

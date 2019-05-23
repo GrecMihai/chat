@@ -3,6 +3,7 @@ $(document).ready(function(){
   var socket = io();//this is possible because of the file added to the views(acel script)
   var room = $('#groupName').val();//get the group name from html
   var sender = $('#sender').val();
+  var userPic = $('#name-image').val();
   //folosind functia asta stii cand userul intra intr'un grup chat, pt ca inseamna ca s'a conectat la acel chat
   socket.on('connect', function(){
     //console.log('User is connected');
@@ -38,6 +39,7 @@ $(document).ready(function(){
       var message = Mustache.render(template, {
         text: data.text,
         sender: data.from,
+        userImage: data.image
       });
       $('#messages').append(message);
   });
@@ -50,7 +52,8 @@ $(document).ready(function(){
     socket.emit('createMessage', {//first parameter is the event name, second parameter is the object sent to server
       text: msg,
       room: room,
-      from: sender
+      from: sender,
+      userPic: userPic
     }, function(){
       //to clear the input field, ceva
       $('#msg').val('');

@@ -171,3 +171,7 @@ body {
 #reload{
     padding: 0px 15px 0px 15px;
 }
+.dropdown-img{
+    width: 40px;
+    height: 40px;
+}

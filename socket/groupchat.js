@@ -19,7 +19,8 @@ module.exports = function(io, Users){
       io.to(message.room).emit('newMessage', {//functia to e pentru a emite mesajele doar pt un anumit room
         text: message.text,
         room: message.room,
-        from: message.from
+        from: message.from,
+        image: message.userPic
       });//emit a event to all the clients that are on a particular channel, including the one that emitted the message
       callback();//daca nu faci asta, mesajul nu se sterge, chiar daca tu pe partea de client ai dat acel $...('')
     });//in loc de io, pt ca vrem eventul from a particular socket
