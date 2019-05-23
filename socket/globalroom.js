@@ -12,7 +12,7 @@ module.exports = function(io, Global, _){
         sa fie returnate doar valorile din Arr ce au name unic
       */
       const arr = _.uniqBy(nameProp, 'name');
-      console.log(arr);
+      //console.log(arr);
 
       io.to(global.room).emit('loggedInUser', arr);
 

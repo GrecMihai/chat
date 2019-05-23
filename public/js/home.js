@@ -12,7 +12,7 @@ $(document).ready(function(){
         clubName: clubName
       },
       success: function(){
-        console.log(clubName);
+        //console.log(clubName);
       }
     })
   })

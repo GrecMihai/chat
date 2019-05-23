@@ -71,7 +71,7 @@ module.exports = function(async, Users, Message, FriendResult){
         //prima functie ia din baza de date datele despre receiver
         function(callback){
           if(req.body.message){
-            console.log(nameRegex);
+            //console.log(nameRegex);
             Users.findOne({'username': {$regex: nameRegex}}, (err, data) => {
               callback(err, data);
             });

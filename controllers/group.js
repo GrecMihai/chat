@@ -54,7 +54,7 @@ module.exports = function(Users, async, Message, FriendResult, Group){
         const result1 = results[0];
         const result2 = results[1];
         const result3 = results[2];
-        console.log(result3);
+        //console.log(result3);
         res.render('groupchat/group', {title: 'SPORTbabble - Group', user:req.user, groupName:name, data:result1, chat:result2, groupMsg: result3});
       });
     },

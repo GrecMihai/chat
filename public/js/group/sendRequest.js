@@ -9,7 +9,7 @@ $(document).ready(function(){
       sender: sender
     }
     socket.emit('joinRequest', params, function(){
-      console.log('Joined');
+      //console.log('Joined');
     });
   });
 
@@ -69,7 +69,7 @@ $(document).ready(function(){
           receiver: receiverName,
           sender: sender
         }, function(){
-          console.log('Request Sent');
+          //console.log('Request Sent');
         })
       }
     })

@@ -1,7 +1,8 @@
-module.exports = function(async, Users, Message, aws, formidable){
+module.exports = function(async, Users, Message, aws, formidable, FriendResult){
   return {
     SetRouting: function(router){
       router.get('/settings/profile', this.getProfilePage);
+      router.post('/settings/profile', this.postProfilePage);
 
       router.post('/userupload', aws.Upload.any(), this.userUpload);
     },
@@ -47,6 +48,57 @@ module.exports = function(async, Users, Message, aws, formidable){
         res.render('user/profile', {title: 'SPORTbabble - Profile', user:req.user, data:result1, chat:result2});
       });
     },
+    postProfilePage:function(req, res){
+      FriendResult.PostRequest(req, res, '/settings/profile');
+
+      async.waterfall([
+        //get the user data
+        function(callback){
+          Users.findOne({'_id':req.user._id}, (err, result) => {
+            callback(err, result);
+          })
+        },
+        //update the data
+        function(result, callback){
+          //if the user has not changed the image, we will take the image it already is in the database
+          if(req.body.upload === null || req.body.upload === ''){
+            Users.update({
+              '_id':req.user._id
+            },
+            {
+              username: req.body.username,
+              fullname: req.body.fullname,
+              mantra: req.body.mantra,
+              gender: req.body.gender,
+              country: req.body.country,
+              userImage: result.userImage
+            },
+            {
+              upsert: true//if the field does not already exist in the document, is going to add it to the particular value
+            }, (err, result) => {
+              res.redirect('/settings/profile');
+            })
+          } else if(req.body.upload !== null || req.body.upload !== ''){
+            Users.update({
+              '_id':req.user._id
+            },
+            {
+              username: req.body.username,
+              fullname: req.body.fullname,
+              mantra: req.body.mantra,
+              gender: req.body.gender,
+              country: req.body.country,
+              userImage: req.body.upload
+            },
+            {
+              upsert: true//if the field does not already exist in the document, is going to add it to the particular value
+            }, (err, result) => {
+              res.redirect('/settings/profile');
+            })
+          }
+        }
+      ]);
+    },
     userUpload: function(req, res){
       const form = new formidable.IncomingForm();
 
@@ -63,6 +115,5 @@ module.exports = function(async, Users, Message, aws, formidable){
       });
       form.parse(req);
     }
-
   }
 }

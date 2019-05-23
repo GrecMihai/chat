@@ -35,10 +35,10 @@ module.exports = function(formidable, Club, aws){
           //})
         });
         form.on('error', (err) => {
-          console.log(err);
+          //console.log(err);
         });
         form.on('end', () => {
-          console.log('file upload is successful');
+          //console.log('file upload is successful');
         });
         form.parse(req);
       }

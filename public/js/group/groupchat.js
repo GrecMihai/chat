@@ -5,7 +5,7 @@ $(document).ready(function(){
   var sender = $('#sender').val();
   //folosind functia asta stii cand userul intra intr'un grup chat, pt ca inseamna ca s'a conectat la acel chat
   socket.on('connect', function(){
-    console.log('User is connected');
+    //console.log('User is connected');
 
     var params = {
       room: room,
@@ -13,7 +13,7 @@ $(document).ready(function(){
     };
     //join event ca sa conectam cei ce sunt intr'un grup la un singur channel, altfel la emmit toti conectatii, indiferent de canal, primesc mesajul
     socket.emit('join', params, function(){//al 3lea argument e optional, si e un callback
-      console.log('User has joined this channel');
+      //console.log('User has joined this channel');
     });
   });
 

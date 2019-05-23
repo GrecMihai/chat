@@ -4,7 +4,7 @@ module.exports = function(io, Users){
 
   //cu asta stii ca s'a conectat un user
   io.on('connection', (socket) => {
-    console.log('User connected');
+    //console.log('User connected');
     //!!!!!!!!!tot ce ascultam va fi inauntrul conexiunii
     socket.on('join', (params, callback) => {//callback pt ca am adaugat acel al 3lea parametru la client, si atunci trebuie adaugat si aici
       socket.join(params.room);//allows sockets to connect to a particular channel, and takes in a room name
@@ -15,7 +15,7 @@ module.exports = function(io, Users){
       callback();
     });
     socket.on('createMessage', (message, callback) => {
-      console.log(message.text);
+      //console.log(message.text);
       io.to(message.room).emit('newMessage', {//functia to e pentru a emite mesajele doar pt un anumit room
         text: message.text,
         room: message.room,
