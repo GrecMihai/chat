@@ -13,11 +13,13 @@ $(document).ready(function(){
       room2: paramTwo
     }
     socket.emit('join PM', params);
+
+    socket.on('new refresh', function(){
+      $('#reload').load(location.href + ' ' + '#reload');
+    });
   });
 
-  socket.on('new refresh', function(){
-    $('#reload').load(location.href + ' ' + '#reload');
-  });
+
 
   $(document).on('click', '#messageLink', function(){
     var chatId = $(this).data().value;

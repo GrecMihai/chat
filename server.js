@@ -16,7 +16,7 @@ const {Global} = require('./helpers/Global');
 
 const container = require('./container');
 
-container.resolve(function(users, _, admin, home, group, results, privatechat, profile){
+container.resolve(function(users, _, admin, home, group, results, privatechat, profile, interest){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
   mongoose.connect('mongodb://localhost/chat');//added path to the database
@@ -47,6 +47,7 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
     results.SetRouting(router);
     privatechat.SetRouting(router);
     profile.SetRouting(router);
+    interest.SetRouting(router);
     app.use(router);
 
   }
