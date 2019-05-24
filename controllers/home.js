@@ -64,7 +64,7 @@
                ];
 
                Message.populate(newResult, arr, (err, newResult1) => {
-                 console.log(newResult1[0].body.sender);
+                 //console.log(newResult1[0].body.sender);
                  callback(err, newResult1);
                });
              }
