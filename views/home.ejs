@@ -91,10 +91,16 @@
                                                   <div class="col-xs-12 col-md-6">
                                                     <input type="hidden" name="id" id="id" value="<%= val2._id %>">
                                                     <input type="hidden" name="clubName" id="clubName" value="<%= val2.name %>">
-
+                                                    <% var isFan = false %>
+                                                    <% _.forEach(val2.fans, function(val3){%>
+                                                    <% if(val3.username === user.username){%>
+                                                    <% isFan = true %>
+                                                    <% }})%>
+                                                    <% if(isFan === false){ %>
                                                       <button class="btn add-fav">
                                                           Add To Favorite
                                                       </button>
+                                                    <% }%>
                                                   </div>
                                               </div>
 

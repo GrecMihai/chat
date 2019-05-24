@@ -1,4 +1,6 @@
 $(document).ready(function(){
+  var chat = document.getElementById("the_chat_area");
+  chat.scrollTop = chat.scrollHeight;
   var socket = io();
 
   var paramOne = $.deparam(window.location.pathname);//get the room name, aici e receiver.sender
@@ -34,6 +36,7 @@ socket.on('new message', function(data){
     sender: data.sender,
   });
   $('#messages').append(message);
+  chat.scrollTop = chat.scrollHeight;
 })
 
   $('#message_form').on('submit', function(e){

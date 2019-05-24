@@ -108,13 +108,12 @@
                                 </div>
                             </div>
 
-                            <div class="chat_area">
+                            <div class="chat_area" id="the_chat_area">
                                 <ul id="messages" class="list-unstyled">
                                   <!-- utilizat pentru a afisa mesajele din baza de date-->
                                   <% if(chats.length > 0){ %>
                                   <% _.forEach(chats, function(val){ %>
                                   <% if(name === val.receiver.username){%>
-                                    <% console.log(val) %>
                                   <li class="left">
                                     <span class="chat-img1 pull-left">
                                       <img src="https://grecmihaibucket.s3.amazonaws.com/<%=val.sender.userImage %>" class="img-circle" alt="">

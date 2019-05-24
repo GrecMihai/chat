@@ -1,4 +1,6 @@
 $(document).ready(function(){
+  var chat = document.getElementById("the_chat_area");
+  chat.scrollTop = chat.scrollHeight;
   //this variable connects to the host that serves the page(pt ca nu i'ai pus URL la parametru)
   var socket = io();//this is possible because of the file added to the views(acel script)
   var room = $('#groupName').val();//get the group name from html
@@ -20,8 +22,9 @@ $(document).ready(function(){
 
   socket.on('usersList', function(users){
     var ol = $('<ol></ol>');
-    for(var i = 0; i < users.length; i++){
-      ol.append('<p><a id="val" data-toggle="modal" data-target="#myModal">'+users[i]+'</a></p>');
+    const uniqueUsers = [...new Set(users)];
+    for(var i = 0; i < uniqueUsers.length; i++){
+      ol.append('<p><a id="val" data-toggle="modal" data-target="#myModal">'+uniqueUsers[i]+'</a></p>');
     }
     //jquery event delegation to add dinamically the name of the user in the modal
     $(document).on('click', '#val', function(){
@@ -31,7 +34,7 @@ $(document).ready(function(){
     });
 
     $('#users').html(ol);
-    $('#numValue').text('(' + users.length + ')');
+    $('#numValue').text('(' + uniqueUsers.length + ')');
   });
 
   socket.on('newMessage', function(data){
@@ -42,11 +45,13 @@ $(document).ready(function(){
         userImage: data.image
       });
       $('#messages').append(message);
+      chat.scrollTop = chat.scrollHeight;
   });
 
 
   //jquery, getting the id of the form and listen on submit on that form
   $('#message-form').on('submit', function(e){
+
     e.preventDefault();//so that the form wont be reloaded
     var msg = $('#msg').val();//store the data from the input field
     socket.emit('createMessage', {//first parameter is the event name, second parameter is the object sent to server

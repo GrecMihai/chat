@@ -88,18 +88,24 @@
                                 <h3 style="margin-top:0px; color:#4aa1f3 !important">Personal Information</h3>
                                 <hr />
                                 <div class="row">
+
                                   <div class="col-md-12">
+                                      <label style="color:#4aa1f3 !important">Username</label>
                                       <input id="username" class="form-control input-lg" name="username" type="text" placeholder="Fullname" value="<%= user.username %>">
                                   </div>
+
                                     <div class="col-md-12">
+                                        <label style="color:#4aa1f3 !important">Fullname</label>
                                         <input id="fullname" class="form-control input-lg" name="fullname" type="text" placeholder="Fullname" value="<%= user.fullname %>">
                                     </div>
+
                                     <div class="col-md-12">
+                                        <label style="color:#4aa1f3 !important">Country</label>
                                         <input id="country" class="form-control input-lg" name="country" type="text" placeholder="Country" value="<%= user.country %>">
                                     </div>
 
                                 </div>
-                                <label style="color:#4aa1f3 !important">Gender : </label>
+                                <label style="color:#4aa1f3 !important">Gender   </label>
                                 <label style="color:#4aa1f3 !important; margin-right:65px;"></label>
                                 <% if(typeof user.gender !== 'undefined' && user.gender === 'Male'){%>
                                   <label class="radio-inline">
