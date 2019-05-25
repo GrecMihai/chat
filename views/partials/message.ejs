@@ -1,7 +1,7 @@
 <% var numberOfTrue = 0 %>
 
 <% for(var i = 0; i < chat.length; i++) {
-      if(chat[i].body.isRead === false){
+      if(chat[i].body.isRead === false  && chat[i].body.receiverName === user.username){
           numberOfTrue = numberOfTrue + 1
       }
 } %>
@@ -30,7 +30,7 @@
 
                 <% if(chat.length > 0) {%>
                 <% _.forEach(chat, function(val){ %>
-                <% if(user.username !== val.body.senderName && val.body.isRead === false){ %>
+                <% if(user.username !== val.body.senderName){ %>
                 <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.senderName.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
                 <div class="row">
                     <div class="col-md-3">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 </a>
-                <% } else if(user.username === val.body.senderName && val.body.isRead === false){ %>
+                <% } else if(user.username === val.body.senderName){ %>
                   <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.receiverName.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
                   <div class="row">
                       <div class="col-md-3">
