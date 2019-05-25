@@ -79,7 +79,6 @@
 
                     <!--MIDDLE-->
                     <div class="col-sm-5 col-md-6 mob-50">
-
                         <div class="profile-signup">
                           <span id="error" class="text-center"></span><!-- the error field -->
 
@@ -91,6 +90,7 @@
 
                                   <div class="col-md-12">
                                       <label style="color:#4aa1f3 !important">Username</label>
+                                      <p style="color:LightGrey;font-size:12px;">*if the username doesn't change, it means that it already exists</p>
                                       <input id="username" class="form-control input-lg" name="username" type="text" placeholder="Fullname" value="<%= user.username %>">
                                   </div>
 
@@ -105,7 +105,7 @@
                                     </div>
 
                                 </div>
-                                <label style="color:#4aa1f3 !important">Gender   </label>
+                                <label style="color:#4aa1f3 !important">Gender</label>
                                 <label style="color:#4aa1f3 !important; margin-right:65px;"></label>
                                 <% if(typeof user.gender !== 'undefined' && user.gender === 'Male'){%>
                                   <label class="radio-inline">
@@ -123,6 +123,15 @@
                                   </label>
                                   <label class="radio-inline">
                                       <input type="radio" name="gender" value="Female" id="gender" checked />
+                                      Female
+                                  </label>
+                                <%}else{%>
+                                  <label class="radio-inline">
+                                      <input type="radio" name="gender" value="Male" id="gender" />
+                                      Male
+                                  </label>
+                                  <label class="radio-inline">
+                                      <input type="radio" name="gender" value="Female" id="gender" />
                                       Female
                                   </label>
                                 <%}%>

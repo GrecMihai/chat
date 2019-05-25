@@ -60,52 +60,81 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
       });
     },
     postProfilePage:function(req, res){
-      FriendResult.PostRequest(req, res, '/settings/profile');
 
+      FriendResult.PostRequest(req, res, '/settings/profile');
       async.waterfall([
-        //get the user data
         function(callback){
+          var userExists = false;
+          if(req.body.username !== req.user.username){
+            const nameRegex = new RegExp("^"+req.body.username.toLowerCase(), "i");
+            Users.findOne({'username': nameRegex}, (err, user1) =>{
+              if(err){
+                return done(err);
+              }
+              //if the username already exist
+              if(user1){
+                userExists = true;
+              }
+              callback(null, userExists);
+            });
+            }
+            else{
+              callback(null, userExists);
+            }
+
+        },
+        //get the user data
+        function(userExists, callback){
           Users.findOne({'_id':req.user._id}, (err, result) => {
-            callback(err, result);
+            const result1 = {
+              result: result,
+              userExists: userExists
+            }
+            callback(err, result1);
           })
         },
         //update the data
-        function(result, callback){
-          //if the user has not changed the image, we will take the image it already is in the database
-          if(req.body.upload === null || req.body.upload === ''){
-            Users.update({
-              '_id':req.user._id
-            },
-            {
-              username: req.body.username,
-              fullname: req.body.fullname,
-              mantra: req.body.mantra,
-              gender: req.body.gender,
-              country: req.body.country,
-              userImage: result.userImage
-            },
-            {
-              upsert: true//if the field does not already exist in the document, is going to add it to the particular value
-            }, (err, result) => {
-              res.redirect('/settings/profile');
-            })
-          } else if(req.body.upload !== null || req.body.upload !== ''){
-            Users.update({
-              '_id':req.user._id
-            },
-            {
-              username: req.body.username,
-              fullname: req.body.fullname,
-              mantra: req.body.mantra,
-              gender: req.body.gender,
-              country: req.body.country,
-              userImage: req.body.upload
-            },
-            {
-              upsert: true//if the field does not already exist in the document, is going to add it to the particular value
-            }, (err, result) => {
-              res.redirect('/settings/profile');
-            })
+        function(result1, callback){
+          if(!result1.userExists){
+            //if the user has not changed the image, we will take the image it already is in the database
+            if(req.body.upload === null || req.body.upload === ''){
+              Users.update({
+                '_id':req.user._id
+              },
+              {
+                username: req.body.username,
+                fullname: req.body.fullname,
+                mantra: req.body.mantra,
+                gender: req.body.gender,
+                country: req.body.country,
+                userImage: result1.result.userImage
+              },
+              {
+                upsert: true//if the field does not already exist in the document, is going to add it to the particular value
+              }, (err, result) => {
+                res.redirect('/settings/profile');
+              })
+            } else if(req.body.upload !== null || req.body.upload !== ''){
+              Users.update({
+                '_id':req.user._id
+              },
+              {
+                username: req.body.username,
+                fullname: req.body.fullname,
+                mantra: req.body.mantra,
+                gender: req.body.gender,
+                country: req.body.country,
+                userImage: req.body.upload
+              },
+              {
+                upsert: true//if the field does not already exist in the document, is going to add it to the particular value
+              }, (err, result) => {
+                res.redirect('/settings/profile');
+              })
+            }
+          }
+          else{
+            res.redirect('/settings/profile');
           }
         }
       ]);

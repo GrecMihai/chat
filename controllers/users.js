@@ -44,7 +44,8 @@ module.exports = function(_, passport, User){
      }),
      getGoogleLogin: passport.authenticate('google', {
        //daca foloseai ['profile', 'email'], nu ti'ar fi cerut permisiunea sa te loghezi, te'ar fi logat automat, iar URL urile sunt inlocuitoare pt cele 2
-       scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read']
+       scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read','https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email']
      }),
      googleLogin: passport.authenticate('google',{
        successRedirect: '/home',

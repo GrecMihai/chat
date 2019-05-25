@@ -28,17 +28,28 @@ passport.use('local.signup', new LocalStrategy({
     }
     //if the email already exist
     if(user){
-      return done(null, false, req.flash('error', 'User with email already exists'));
+      return done(null, false, req.flash('error', 'User with this email already exists'));
     }
-    //save the data in the DB
-    const newUser = new User();
-    newUser.username = req.body.username;
-    newUser.fullname = req.body.username;//ASTA O FACUT'O EL PT CA NU VREA CA FULL NAME SA FIE EMPTY
-    newUser.email = req.body.email;
-    newUser.password = newUser.encryptPassword(req.body.password);
+    const nameRegex = new RegExp("^"+req.body.username.toLowerCase(), "i");
+    User.findOne({'username': nameRegex}, (err, user1) =>{
+      if(err){
+        return done(err);
+      }
+      //if the username already exist
+      if(user1){
+        return done(null, false, req.flash('error', 'User with this username already exists'));
+      }
+      //save the data in the DB
+      const newUser = new User();
+      newUser.username = req.body.username;
+      newUser.fullname = req.body.username;//ASTA O FACUT'O EL PT CA NU VREA CA FULL NAME SA FIE EMPTY
+      newUser.email = req.body.email;
+      newUser.password = newUser.encryptPassword(req.body.password);
+      newUser.userImage = "default.png";
 
-    newUser.save((err) => {
-      done(null, newUser);
+      newUser.save((err) => {
+        done(null, newUser);
+      });
     });
   });
 

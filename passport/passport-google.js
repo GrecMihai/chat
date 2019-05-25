@@ -10,7 +10,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });//ia ID'ul dintr'o sesiune si daca e valid returneaza din DB datele coresp
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {////!!!!!!!!!!!!!!!!!!!!!!!!vezi cum poti face cu funciton nu cu vrajeala asta de ()=>
+  User.findById(id, (err, user) => {
     done(err, user);
   })
 })
@@ -37,7 +37,8 @@ passport.use(new GoogleStrategy({
     newUser.username = profile.displayName;//FACE ASTA DOAR CA SA NU IL LASE GOL
     newUser.fullname = profile.displayName;
     newUser.userImage = profile._json.picture;
-    newUser.username = 'test123';
+    newUser.userImage = "default.png";
+    newUser.email = profile.emails[0].value;
 
     newUser.save((err) => {
       if(err){
