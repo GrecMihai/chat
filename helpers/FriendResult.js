@@ -17,7 +17,6 @@ module.exports = function(async, Users, Message){
               {
                 $push: {request: {
                   userId: req.user._id,
-                  username: req.user.username
                 }},
                 $inc: {totalRequest: 1}
               }, (err, count) => {
@@ -27,18 +26,20 @@ module.exports = function(async, Users, Message){
         },
         //for sender
         function(callback){
-          if(req.body.receiverName){
-            Users.update({
-              'username': req.user.username,//verificam sa fie userul care trebuie
-              'sentRequest.username': {$ne: req.body.receiverName}//sa verificam ca nu s'a tirmis deja o cerere si baiatu celalant nu a acceptat'o
-            },{//push the data here
-              $push: {sentRequest: {
-                username: req.body.receiverName
-              }}
-            }, (err, count) => {
-              callback(err, count);
-            })
+          Users.findOne({'username':req.body.receiverName}, (err, user) => {
+            if(user){
+              Users.update({
+                'username': req.user.username,//verificam sa fie userul care trebuie
+                'sentRequest.username': {$ne: req.body.receiverName}//sa verificam ca nu s'a tirmis deja o cerere si baiatu celalant nu a acceptat'o
+              },{//push the data here
+                $push: {sentRequest: {
+                  user: user._id
+                }}
+              }, (err, count) => {
+                callback(err, count);
+              })
           }
+        })
         }
       ], (err, results) => {
         res.redirect(url);//il trimiti inapoi la grup
@@ -56,11 +57,9 @@ module.exports = function(async, Users, Message){
             },{//add to the friends list
               $push: {friendsList: {
                 friendId: req.body.senderId,
-                friendName: req.body.senderName
               }},//delete the request
               $pull: {request: {
                 userId: req.body.senderId,
-                username: req.body.senderName
               }},//decrement the totalRequest
               $inc: {totalRequest: -1}
             }, (err, count) => {
@@ -77,10 +76,9 @@ module.exports = function(async, Users, Message){
             },{//add to the friends list
               $push: {friendsList: {
                 friendId: req.user._id,
-                friendName: req.user.username
               }},//delete the request
               $pull: {sentRequest: {
-                username: req.user.username
+                user: req.user._id
               }}
             }, (err, count) => {
               callback(err, count);
@@ -106,13 +104,14 @@ module.exports = function(async, Users, Message){
         },
         //sender
         function(callback){
+          console.log(req.user);
           if(req.body.user_Id){
             Users.update({
               '_id': req.body.user_Id,
-              'sentRequest.username' : {$eq: req.user.username}
+              'sentRequest.user' : {$eq: req.user._id}
             },{//delete the request
               $pull: {sentRequest: {
-                username: req.user.username
+                user: req.user._id
               }}
             }, (err, count) => {
               callback(err, count);

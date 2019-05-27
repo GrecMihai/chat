@@ -72,10 +72,9 @@
                                                         Online Friends <span id="numOfFriends"></span>
                                                     </p>
                                                     <hr style="margin-top:10px" />
-
                                                     <% if(data.friendsList.length > 0){ %>
                                                       <% _.forEach(data.friendsList, function(value){ %>
-                                                        <div class="friend" hidden><%= value.friendName %></div>
+                                                        <div class="friend" hidden><%= value.friendId.username %></div>
                                                       <% }) %>
                                                     <% } %>
 

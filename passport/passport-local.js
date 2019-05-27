@@ -9,8 +9,13 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });//ia ID'ul dintr'o sesiune si daca e valid returneaza din DB datele coresp
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {////!!!!!!!!!!!!!!!!!!!!!!!!vezi cum poti face cu funciton nu cu vrajeala asta de ()=>
-    done(err, user);
+  //User.findById(id, (err, user) => {
+    User.findById(id)
+    .populate('request.userId')
+    .populate('friendsList.friendId')
+    .populate('sentRequest.user')
+    .exec((err, user) => {
+      done(err, user);
   })
 })
 
@@ -72,6 +77,8 @@ passport.use('local.login', new LocalStrategy({
       messages.push('Email does not exists or password is invalid');
       return done(null, false, req.flash('error', messages));
     }
+    //console.log(user);
+
     return done(null, user);
   });
 

@@ -50,14 +50,14 @@
         								<div class="col-md-12">
         									<div class="col-md-12">
         										<p class="text-left">
-        											<strong id=""><%= val.username %></strong>
+        											<strong id=""><%= val.userId.username %></strong>
         										</p>
         									</div>
         									<div class="col-md-12">
         										<div class="row">
         											<div class="col-md-6 col-sm-6 col-xs-6">
                                 <input type="hidden"  name="senderId" id="senderId" value="<%= val.userId._id %>">
-                                <input type="hidden"  name="senderName" id="senderName" value="<%= val.username %>">
+                                <input type="hidden"  name="senderName" id="senderName" value="<%= val.userId.username %>">
         												<button type="submit" name="accept" id="accept_friend" class="btn btn-default drop-accept accept"><i class="fa fa-check" aria-hidden="true"></i> Accept</button>
         											</div>
         											<div class="col-md-6 col-sm-6 col-xs-6">

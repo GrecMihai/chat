@@ -10,9 +10,13 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });//ia ID'ul dintr'o sesiune si daca e valid returneaza din DB datele coresp
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {////!!!!!!!!!!!!!!!!!!!!!!!!vezi cum poti face cu funciton nu cu vrajeala asta de ()=>
+  User.findById(id)
+  .populate('request.userId')
+  .populate('friendsList.friendId')
+  .populate('sentRequest.user')
+  .exec((err, user) => {
     done(err, user);
-  })
+})
 })
 
 //add passport middleware that will deal with sign up

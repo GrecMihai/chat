@@ -83,7 +83,7 @@
            dataChunk.push(res1.slice(i, i + chunkSize));
          }
          const countrySort = _.sortBy(res2, '_id');//sorting the countries
-
+         //console.log(req.user);
          res.render('home', {title: 'Chat - Home', user:req.user, chunks: dataChunk, country: countrySort, data: res3, chat: res4});
        })
      },
