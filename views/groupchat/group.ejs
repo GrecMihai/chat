@@ -17,7 +17,8 @@
 
 <body>
 <%- include  ../partials/navbar.ejs %>
-
+<input type="hidden" name="sender-name" id="sender-name" value="<%= user.username%>">
+<input type="hidden" name="za-sender" id="za-sender" value="<%= user%>">
 
     <div class="col-md-12">
       <input type="hidden" id="name-user" value="<%= user.username %>">
@@ -72,7 +73,7 @@
                                                         Online Friends <span id="numOfFriends"></span>
                                                     </p>
                                                     <hr style="margin-top:10px" />
-                                                    
+
                                                     <% if(data.friendsList.length > 0){ %>
                                                       <% _.forEach(data.friendsList, function(value){ %>
                                                         <div class="friend" hidden>@<%= value.friendId.username %></div>
@@ -184,8 +185,9 @@
                                   <div class="modal-body">
                                     <form action="" method="get" id="add_friend">
                                         <input type="hidden" name="receiverName" id="receiverName" value="">
-                                        <input type="hidden" name="sender-name" id="sender-name" value="<%= user.username  %>">
+                                        <input type="hidden" name="sender-friends" id="sender-friends" value="<%= user.friendsList  %>">
                                         <button type="submit" id="friend-add" class="btn add"><i class="fa fa-user"></i> Add Friend</button>
+
 
                                         <a id="nameLink" class="btn ">View Profile</a>
 

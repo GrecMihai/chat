@@ -28,7 +28,17 @@ $(document).ready(function(){
     }
     //jquery event delegation to add dinamically the name of the user in the modal
     $(document).on('click', '#val', function(){
-      $('#name').text('@' + $(this).text());//this get the text from the currently clicked element
+      var senderName = $('#sender-name').val();
+      var areFriends = false;
+      if($(this).text() === senderName){
+        $('#friend-add').hide();
+        $('#nameLink').hide();
+      }
+      else{
+        $('#friend-add').show();
+        $('#nameLink').show();
+      }
+      $('#name').text($(this).text());//this get the text from the currently clicked element
       $('#receiverName').val($(this).text());//ceva valoare hidden, utilizata la emitere la socket io
       $('#nameLink').attr("href", "/profile/"+$(this).text());//pentru cand apesi pe butonul de profil, sa te duca la el
     });
