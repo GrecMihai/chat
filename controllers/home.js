@@ -37,22 +37,14 @@
          function(callback){
            const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
            Message.aggregate(
-             {$match:{$or:[{'senderName':nameRegex},
-             {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
+             {$match:{$or:[{'sender':req.user._id},
+             {'receiver':req.user._id}]}},//ia toate mesajele in care apare senderul
              {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
              {
                $group:{"_id":{
                  //this is a message that we create
                  "last_message_between":{
-                   $cond:[
-                     {
-                       $gt:[//get the sender and receiver name
-                         {$substr:["$senderName", 0, 1]},
-                         {$substr:["$receiverName", 0, 1]}]
-                     },
-                       {$concat:["$senderName"," and ","$receiverName"]},
-                       {$concat:["$receiverName"," and ","$senderName"]}
-                   ]
+                   $concat:["user1"," and ", " user2"]
                  }
                }, "body":{$first:"$$ROOT"}
                }
@@ -64,7 +56,7 @@
                ];
 
                Message.populate(newResult, arr, (err, newResult1) => {
-                 //console.log(newResult1[0].body.sender);
+                 //console.log(newResult1);
                  callback(err, newResult1);
                });
              }
@@ -83,7 +75,7 @@
            dataChunk.push(res1.slice(i, i + chunkSize));
          }
          const countrySort = _.sortBy(res2, '_id');//sorting the countries
-         //console.log(req.user);
+         //console.log(typeof req.user._id.toString());
          res.render('home', {title: 'Chat - Home', user:req.user, chunks: dataChunk, country: countrySort, data: res3, chat: res4});
        })
      },

@@ -20,22 +20,14 @@ module.exports = function(async, Users, Message, FriendResult){
         function(callback){
           const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
           Message.aggregate(
-            {$match:{$or:[{'senderName':nameRegex},
-            {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
+            {$match:{$or:[{'sender':req.user._id},
+            {'receiver':req.user._id}]}},//ia toate mesajele in care apare senderul
             {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
             {
               $group:{"_id":{
                 //this is a message that we create
                 "last_message_between":{
-                  $cond:[
-                    {
-                      $gt:[//get the sender and receiver name
-                        {$substr:["$senderName", 0, 1]},
-                        {$substr:["$receiverName", 0, 1]}]
-                    },
-                      {$concat:["$senderName"," and ","$receiverName"]},
-                      {$concat:["$receiverName"," and ","$senderName"]}
-                  ]
+                  $concat:["user1"," and ", " user2"]
                 }
               }, "body":{$first:"$$ROOT"}
               }
@@ -47,7 +39,7 @@ module.exports = function(async, Users, Message, FriendResult){
               ];
 
               Message.populate(newResult, arr, (err, newResult1) => {
-                //console.log(newResult1[0].body.sender);
+                //console.log(newResult1);
                 callback(err, newResult1);
               });
             }
@@ -61,7 +53,7 @@ module.exports = function(async, Users, Message, FriendResult){
             .populate('sender')
             .populate('receiver')
             .exec((err, result3) => {
-              console.log(result3);
+              //console.log(result3);
               callback(err, result3);
             });
         }
@@ -95,12 +87,8 @@ module.exports = function(async, Users, Message, FriendResult){
             const newMessage = new Message();
             newMessage.sender = req.user._id;//in req.user se stocheaza datele de la useurl logat, based on passport that we used
             newMessage.receiver = data._id;
-            newMessage.senderName = req.user.username;
-            newMessage.receiverName = data.username;
             newMessage.message = req.body.message;
-            newMessage.userImage = req.user.UserImage;
             newMessage.createdAt = new Date();//now
-
             newMessage.save((err, result) => {
               if(err){
                 return next(err);

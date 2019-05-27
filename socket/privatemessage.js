@@ -10,7 +10,8 @@ module.exports = function(io){
       //o sa mearga la ambii pt ca ei mai sus au dat join si la room1, si la room2, deci oricare dintre ele putea fi utilizata pt message.room
       io.to(message.room).emit('new message', {
         text: message.text,
-        sender: message.sender
+        sender: message.sender,
+        img: message.img
       });
 
       io.emit('message display', {});

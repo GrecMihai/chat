@@ -34,6 +34,7 @@ socket.on('new message', function(data){
   var message = Mustache.render(template, {
     text: data.text,
     sender: data.sender,
+    img: data.img
   });
   $('#messages').append(message);
   chat.scrollTop = chat.scrollHeight;
@@ -43,12 +44,14 @@ socket.on('new message', function(data){
     e.preventDefault();//so that the form wont be reloaded
     var msg = $('#msg').val();//store the data from the input field
     var sender = $('#name-user').val();
+    var img = $('#name-image').val();
     //acest if verifica sa nu se poata trimite un mesaj care sa contina doar spatii
     if(msg.trim().length > 0){
       socket.emit('private message', {//first parameter is the event name, second parameter is the object sent to server
         text: msg,
         sender: sender,
-        room: paramOne
+        room: paramOne,
+        img: img
       }, function(){
         $('#msg').val('');//clear the input field
       });

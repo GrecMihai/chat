@@ -1,7 +1,7 @@
 <% var numberOfTrue = 0 %>
 
 <% for(var i = 0; i < chat.length; i++) {
-      if(chat[i].body.isRead === false  && chat[i].body.receiverName === user.username){
+      if(chat[i].body.isRead === false  && chat[i].body.receiver.username === user.username){
           numberOfTrue = numberOfTrue + 1
       }
 } %>
@@ -30,8 +30,8 @@
 
                 <% if(chat.length > 0) {%>
                 <% _.forEach(chat, function(val){ %>
-                <% if(user.username !== val.body.senderName){ %>
-                <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.senderName.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
+                <% if(user.username !== val.body.sender.username){ %>
+                <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.sender.username.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
                 <div class="row">
                     <div class="col-md-3">
                         <p class="text-center">
@@ -43,10 +43,10 @@
                             <div class="col-md-12 textRow">
                                 <div class="col-md-12" id="textRow">
                                     <p class="text-left drop-name">
-                                        <% if(user.username !== val.body.receiverName){ %>
-                                          <strong><%= val.body.receiverName %></strong>
+                                        <% if(user.username !== val.body.receiver.username){ %>
+                                          <strong><%= val.body.receiver.username %></strong>
                                         <% } else{ %>
-                                          <strong><%= val.body.senderName %></strong>
+                                          <strong><%= val.body.sender.username %></strong>
                                         <% } %>
                                     </p>
                                     <input type="hidden" name="chatId" value="chatId" value="<%= val.body._id %>">
@@ -57,8 +57,8 @@
                     </div>
                 </div>
                 </a>
-                <% } else if(user.username === val.body.senderName){ %>
-                  <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.receiverName.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
+                <% } else if(user.username === val.body.sender.username){ %>
+                  <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.receiver.username.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
                   <div class="row">
                       <div class="col-md-3">
                           <p class="text-center">
@@ -70,10 +70,10 @@
                               <div class="col-md-12 textRow">
                                   <div class="col-md-12" id="textRow">
                                       <p class="text-left drop-name">
-                                          <% if(user.username !== val.body.receiverName){ %>
-                                            <strong><%= val.body.receiverName %></strong>
+                                          <% if(user.username !== val.body.receiver.username){ %>
+                                            <strong><%= val.body.receiver.username %></strong>
                                           <% } else{ %>
-                                            <strong><%= val.body.senderName %></strong>
+                                            <strong><%= val.body.sender.username %></strong>
                                           <% } %>
                                       </p>
                                       <input type="hidden" name="chatId" value="chatId" value="<%= val.body._id %>">
