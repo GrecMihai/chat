@@ -9,7 +9,7 @@ module.exports = function(){
       req.checkBody('email', 'Email is Required').notEmpty();
       req.checkBody('email', 'Email is invalid').isEmail();
       req.checkBody('password', 'Password is Required').notEmpty();
-      req.checkBody('password', 'Password must not be less than 5').isLength({min: 5});
+      req.checkBody('password', 'Password must containt one uppercase letter, one lowercase letter, one digit, one special character and be at least 8 characters long').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,"i");
       req.getValidationResult()//this returns a Promise
         .then((result) => {
           const errors = result.array();

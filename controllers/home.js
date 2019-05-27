@@ -90,14 +90,14 @@
      postHomePage: function(req, res){
        async.parallel([
          function(callback){
+
            //add the fan to the fans field in clubNames collection
            Club.update({
              '_id':req.body.id,
-             'fans.username':{$ne: req.user.username}//verify that he is not already a fan
+             'fans.user':{$ne: req.user._id}//verify that he is not already a fan
            },{
              $push: {fans: {
-               username: req.user.username,
-               email: req.user.email
+               user: req.user._id
              }}
            }, (err, count) => {
              //console.log(count);

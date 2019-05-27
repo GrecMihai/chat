@@ -6,8 +6,7 @@ const clubNames = mongoose.Schema({
   sport: {type:String, default:''},
   image: {type:String, default: 'default.png'},
   fans: [{
-    username: {type:String, default:''},
-    email: {type:String, default:''}
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
   }]
 });
 

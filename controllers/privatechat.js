@@ -55,10 +55,11 @@ module.exports = function(async, Users, Message, FriendResult){
         function(callback){
           //go into the message collection, find every document that has senderName or receiverName equal with the user's username, in each document it will populate the sender and receiver field
           //(adica ia toate informatiile despre sender si receiver din colectia users)
-          Message.find({'$or':[{'senderName':req.user.username}, {'receiverName':req.user.username}]})
+          Message.find({'$or':[{'sender':req.user._id}, {'receiver':req.user._id}]})
             .populate('sender')
             .populate('receiver')
             .exec((err, result3) => {
+              console.log(result3);
               callback(err, result3);
             });
         }
