@@ -18,6 +18,7 @@ $(document).ready(function(){
   });
 
   socket.on('loggedInUser', function(users){
+
     var friends = $('.friend').text();//asa se iau toti prietenii, pentru ca group.ejs a fost adaugat un div cu class=friend, ce are acesti precini, si cred ca cu @ se intampla ceva
     //console.log(friends);
     var friend = friends.split('@');//are legatura cu cel @ pt ca altfel i'ar pune legati unu de celalant, si pt ca primul va deveni @, nu ii folosim numai de la index 1

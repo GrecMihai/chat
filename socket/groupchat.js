@@ -1,3 +1,5 @@
+const User = require('../models/user');
+
 module.exports = function(io, Users){
 
   const users = new Users();
@@ -9,10 +11,17 @@ module.exports = function(io, Users){
     socket.on('join', (params, callback) => {//callback pt ca am adaugat acel al 3lea parametru la client, si atunci trebuie adaugat si aici
       socket.join(params.room);//allows sockets to connect to a particular channel, and takes in a room name
       users.AddUserData(socket.id, params.name, params.room);
+      User.findOne({'username':params.name})
+      .populate('request.userId')
+      .populate('friendsList.friendId')
+      .populate('sentRequest.user')
+      .exec((err, result) => {
+        io.to(params.room).emit('usersList', {friends: result.friendsList, users:users.GetUsersList(params.room)});
+        callback();
+      });
       //console.log(users);
       //say to all users when a new user has joined the channel
-      io.to(params.room).emit('usersList', users.GetUsersList(params.room));
-      callback();
+
     });
     socket.on('createMessage', (message, callback) => {
       //console.log(message.text);
@@ -29,7 +38,13 @@ module.exports = function(io, Users){
       var user = users.RemoveUser(socket.id);
       //ca sa ii anunti si pe ceilalti ca a iesit nebunu
       if(user){
-        io.to(user.room).emit('usersList', users.GetUsersList(user.room));
+        User.findOne({'username':user.name})
+        .populate('request.userId')
+        .populate('friendsList.friendId')
+        .populate('sentRequest.user')
+        .exec((err, result) => {
+          io.to(user.room).emit('usersList', {friends: result.friendsList, users:users.GetUsersList(user.room)});
+        });
       }
     });
 

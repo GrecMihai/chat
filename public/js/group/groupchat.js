@@ -22,7 +22,7 @@ $(document).ready(function(){
 
   socket.on('usersList', function(users){
     var ol = $('<ol></ol>');
-    const uniqueUsers = [...new Set(users)];
+    const uniqueUsers = [...new Set(users.users)];
     for(var i = 0; i < uniqueUsers.length; i++){
       ol.append('<p><a id="val" data-toggle="modal" data-target="#myModal">'+uniqueUsers[i]+'</a></p>');
     }
@@ -30,9 +30,19 @@ $(document).ready(function(){
     $(document).on('click', '#val', function(){
       var senderName = $('#sender-name').val();
       var areFriends = false;
+      var i;
+      for(i = 0; i < users.friends.length; i++){
+        if($(this).text() === users.friends[i].friendId.username){
+          areFriends = true;
+        }
+      }
       if($(this).text() === senderName){
         $('#friend-add').hide();
         $('#nameLink').hide();
+      }
+      else if (areFriends === true){
+        $('#friend-add').hide();
+        $('#nameLink').show();
       }
       else{
         $('#friend-add').show();
