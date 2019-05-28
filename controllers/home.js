@@ -30,6 +30,8 @@
          function(callback){
            Users.findOne({'username':req.user.username})//search for the user
              .populate('request.userId')//for that particular user, if the user already has a friend request, is going to populate that field userId, with all the data of the user that send the friend request
+             .populate('friendsList.friendId')
+             .populate('sentRequest.user')
              .exec((err, result) => {
                callback(err, result);
              });
