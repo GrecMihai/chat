@@ -104,7 +104,6 @@ module.exports = function(async, Users, Message){
         },
         //sender
         function(callback){
-          console.log(req.user);
           if(req.body.user_Id){
             Users.update({
               '_id': req.body.user_Id,
