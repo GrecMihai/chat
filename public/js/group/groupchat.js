@@ -22,7 +22,7 @@ $(document).ready(function(){
 
   socket.on('usersList', function(users){
     var ol = $('<ol></ol>');
-    const uniqueUsers = [...new Set(users)];
+    const uniqueUsers = [...new Set(users)].sort((a, b) => (a.toLowerCase() > b.toLowerCase()) ? 1 : -1);
     for(var i = 0; i < uniqueUsers.length; i++){
       ol.append('<p><a id="val" data-toggle="modal" data-target="#myModal">'+uniqueUsers[i]+'</a></p>');
     }

@@ -2,6 +2,7 @@ module.exports = function(io, Global, _){
   const clients = new Global();
 
   io.on('connection', (socket) => {
+
     socket.on('global room', (global) => {
       socket.join(global.room);
       clients.EnterRoom(socket.id, global.name, global.room, global.img);
@@ -12,9 +13,8 @@ module.exports = function(io, Global, _){
         sa fie returnate doar valorile din Arr ce au name unic
       */
       const arr = _.uniqBy(nameProp, 'name');
-      //console.log(arr);
 
-      io.to(global.room).emit('loggedInUser', arr);
+      io.to(global.room).emit('loggedInUser', arr.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
 
     });
     socket.on('disconnect', () => {
@@ -24,7 +24,7 @@ module.exports = function(io, Global, _){
         var userData = clients.GetRoomList(user.room);
         const arr = _.uniqBy(userData, 'name');
         const removeData = _.remove(arr, {'name':user.name});
-        io.to(user.room).emit('loggedInUser', removeData);
+        io.to(user.room).emit('loggedInUser', removeData.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
       }
     });
   });
