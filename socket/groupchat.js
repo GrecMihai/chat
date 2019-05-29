@@ -16,7 +16,8 @@ module.exports = function(io, Users){
       .populate('friendsList.friendId')
       .populate('sentRequest.user')
       .exec((err, result) => {
-        io.to(params.room).emit('usersList', {friends: result.friendsList, users:users.GetUsersList(params.room)});
+        io.to(params.room).emit('usersList', users.GetUsersList(params.room));
+        socket.emit('userFriends', result.friendsList);
         callback();
       });
       //console.log(users);
@@ -43,7 +44,8 @@ module.exports = function(io, Users){
         .populate('friendsList.friendId')
         .populate('sentRequest.user')
         .exec((err, result) => {
-          io.to(user.room).emit('usersList', {friends: result.friendsList, users:users.GetUsersList(user.room)});
+          io.to(user.room).emit('usersList', users.GetUsersList(user.room));
+          socket.emit('userFriends', result.friendsList);
         });
       }
     });

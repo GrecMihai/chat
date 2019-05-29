@@ -22,32 +22,13 @@ $(document).ready(function(){
 
   socket.on('usersList', function(users){
     var ol = $('<ol></ol>');
-    const uniqueUsers = [...new Set(users.users)];
+    const uniqueUsers = [...new Set(users)];
     for(var i = 0; i < uniqueUsers.length; i++){
       ol.append('<p><a id="val" data-toggle="modal" data-target="#myModal">'+uniqueUsers[i]+'</a></p>');
     }
     //jquery event delegation to add dinamically the name of the user in the modal
     $(document).on('click', '#val', function(){
-      var senderName = $('#sender-name').val();
-      var areFriends = false;
-      var i;
-      for(i = 0; i < users.friends.length; i++){
-        if($(this).text() === users.friends[i].friendId.username){
-          areFriends = true;
-        }
-      }
-      if($(this).text() === senderName){
-        $('#friend-add').hide();
-        $('#nameLink').hide();
-      }
-      else if (areFriends === true){
-        $('#friend-add').hide();
-        $('#nameLink').show();
-      }
-      else{
-        $('#friend-add').show();
-        $('#nameLink').show();
-      }
+
       $('#name').text($(this).text());//this get the text from the currently clicked element
       $('#receiverName').val($(this).text());//ceva valoare hidden, utilizata la emitere la socket io
       $('#nameLink').attr("href", "/profile/"+$(this).text());//pentru cand apesi pe butonul de profil, sa te duca la el
@@ -55,6 +36,32 @@ $(document).ready(function(){
 
     $('#users').html(ol);
     $('#numValue').text('(' + uniqueUsers.length + ')');
+  });
+
+  socket.on('userFriends', function(users){
+    $(document).on('click', '#val', function(){
+    var senderName = $('#sender-name').val();
+    var areFriends = false;
+    var i;
+    for(i = 0; i < users.length; i++){
+      if($(this).text() === users[i].friendId.username){
+        //console.log('intru aici');
+        areFriends = true;
+      }
+    }
+    if($(this).text() === senderName){
+      $('#friend-add').hide();
+      $('#nameLink').hide();
+    }
+    else if (areFriends === true){
+      $('#friend-add').hide();
+      $('#nameLink').show();
+    }
+    else{
+      $('#friend-add').show();
+      $('#nameLink').show();
+    }
+  });
   });
 
   socket.on('newMessage', function(data){
