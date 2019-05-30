@@ -22,12 +22,11 @@ $(document).ready(function(){
 
 
   $(document).on('click', '#messageLink', function(){
-    var chatId = $(this).data().value;
-
+    var data = $(this).data().value;
     $.ajax({
       url: '/chat/'+paramOne,
       type: 'POST',
-      data: {chatId: chatId},
+      data: data,
       success: function(){
         //do nothing
       }

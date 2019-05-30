@@ -13,7 +13,6 @@ module.exports = function(io, Global, _){
         sa fie returnate doar valorile din Arr ce au name unic
       */
       const arr = _.uniqBy(nameProp, 'name');
-
       io.to(global.room).emit('loggedInUser', arr.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
 
     });

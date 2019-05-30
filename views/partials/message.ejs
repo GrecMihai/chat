@@ -31,7 +31,7 @@
                 <% if(chat.length > 0) {%>
                 <% _.forEach(chat, function(val){ %>
                 <% if(user.username !== val.body.sender.username){ %>
-                <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.sender.username.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
+                <a data-value="<%= JSON.stringify({receiverId: val.body.receiver._id, chatId: val.body._id, senderId:val.body.sender._id}) %>" id="messageLink" href="/chat/<%= val.body.sender.username.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
                 <div class="row">
                     <div class="col-md-3">
                         <p class="text-center">
@@ -58,7 +58,7 @@
                 </div>
                 </a>
                 <% } else if(user.username === val.body.sender.username){ %>
-                  <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= val.body.receiver.username.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
+                  <a data-value="<%= JSON.stringify({receiverId: val.body.receiver._id, chatId: val.body._id, senderId:val.body.sender._id}) %>" id="messageLink" href="/chat/<%= val.body.receiver.username.replace(/ /g, "-") %>.<%= user.username.replace(/ /g, "-") %>">
                   <div class="row">
                       <div class="col-md-3">
                           <p class="text-center">

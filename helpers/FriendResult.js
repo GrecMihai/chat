@@ -119,13 +119,14 @@ module.exports = function(async, Users, Message){
         },
         function(callback){
           //update the message so that it is seen
-          if(req.body.chatId){
+          if(req.body.receiverId && req.body.receiverId == req.user._id){
             Message.update({
-              '_id': req.body.chatId
+              'receiver': req.body.receiverId,
+              'sender': req.body.senderId
             },
             {
               "isRead": true
-            }, (err, done) => {
+            },{"multi": true}, (err, done) => {
               callback(err, done);
             })
           }

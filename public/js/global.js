@@ -18,7 +18,6 @@ $(document).ready(function(){
   });
 
   socket.on('loggedInUser', function(users){
-    console.log(users);
     if(users.length > 0){
       var friends = $('.friend').text();//asa se iau toti prietenii, pentru ca group.ejs a fost adaugat un div cu class=friend, ce are acesti precini, si cred ca cu @ se intampla ceva
       //console.log(friends);
