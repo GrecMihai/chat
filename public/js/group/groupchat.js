@@ -81,26 +81,28 @@ $(document).ready(function(){
 
     e.preventDefault();//so that the form wont be reloaded
     var msg = $('#msg').val();//store the data from the input field
-    socket.emit('createMessage', {//first parameter is the event name, second parameter is the object sent to server
-      text: msg,
-      room: room,
-      from: sender,
-      userPic: userPic
-    }, function(){
-      //to clear the input field, ceva
-      $('#msg').val('');
-    });
-    $.ajax({
-      url: '/group/'+room,
-      type: 'POST',
-      data: {
-        message: msg,
-        groupName: room.replace(/-/g, " "),
-      },
-      success: function(){
+    //verify if the message is a valid one(doesn't only have spaces and new lines)
+    if(msg.replace(/\s/g, '').length > 0){
+      socket.emit('createMessage', {//first parameter is the event name, second parameter is the object sent to server
+        text: msg,
+        room: room,
+        from: sender,
+        userPic: userPic
+      }, function(){
+        //to clear the input field, ceva
         $('#msg').val('');
-      }
-    })
-
+      });
+      $.ajax({
+        url: '/group/'+room,
+        type: 'POST',
+        data: {
+          message: msg,
+          groupName: room.replace(/-/g, " "),
+        },
+        success: function(){
+          $('#msg').val('');
+        }
+      })
+    }
   });
 });

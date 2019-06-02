@@ -47,13 +47,15 @@ module.exports = function(async, Users, Message){
 
       //accepting and cancelling the friend request
       async.parallel([
+
         //CLICK ON ACCEPT
         //update the document for the receiver request
         function(callback){
           if(req.body.senderId){
             Users.update({
               '_id': req.user._id,
-              'friendsList.friendId' : {$ne: req.body.senderId}
+              'friendsList.friendId' : {$ne: req.body.senderId},
+              '_id': {$ne: req.body.senderId}
             },{//add to the friends list
               $push: {friendsList: {
                 friendId: req.body.senderId,
@@ -72,7 +74,8 @@ module.exports = function(async, Users, Message){
           if(req.body.senderId){
             Users.update({
               '_id': req.body.senderId,
-              'friendsList.friendId' : {$ne: req.user._id}
+              'friendsList.friendId' : {$ne: req.user._id},
+              '_id': {$ne: req.user._id}
             },{//add to the friends list
               $push: {friendsList: {
                 friendId: req.user._id,
@@ -81,6 +84,7 @@ module.exports = function(async, Users, Message){
                 user: req.user._id
               }}
             }, (err, count) => {
+              //console.log(count);
               callback(err, count);
             });
           }

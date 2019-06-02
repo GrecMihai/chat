@@ -1,5 +1,4 @@
 <% var numberOfTrue = 0 %>
-
 <% for(var i = 0; i < chat.length; i++) {
       if(chat[i].body.isRead === false  && chat[i].body.receiver.username === user.username){
           numberOfTrue = numberOfTrue + 1

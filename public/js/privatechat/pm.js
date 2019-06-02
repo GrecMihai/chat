@@ -45,31 +45,35 @@ socket.on('new message', function(data){
     var msg = $('#msg').val();//store the data from the input field
     var sender = $('#name-user').val();
     var img = $('#name-image').val();
-    //acest if verifica sa nu se poata trimite un mesaj care sa contina doar spatii
-    if(msg.trim().length > 0){
-      socket.emit('private message', {//first parameter is the event name, second parameter is the object sent to server
-        text: msg,
-        sender: sender,
-        room: paramOne,
-        img: img
-      }, function(){
-        $('#msg').val('');//clear the input field
-      });
+    if(msg.replace(/\s/g, '').length > 0){
+      //acest if verifica sa nu se poata trimite un mesaj care sa contina doar spatii
+      if(msg.trim().length > 0){
+        socket.emit('private message', {//first parameter is the event name, second parameter is the object sent to server
+          text: msg,
+          sender: sender,
+          room: paramOne,
+          img: img
+        }, function(){
+          $('#msg').val('');//clear the input field
+        });
+      }
     }
   });
   //face vrajeala asta pt a salva mesajul cand se apasa pe Send, da ii acelasi lucru ca si cum ar fi pus functionalitatea mai sus, in form.submit, pt ca se declanseaza deodata
   $('#send-message').on('click', function(){
     var message = $('#msg').val();
-    $.ajax({
-      url: '/chat/' + paramOne,
-      type: 'POST',
-      data: {
-        message: message
-      },
-      success: function(){
-        $('#msg').val('');
-      }
-    });
+    if(msg.replace(/\s/g, '').length > 0){
+      $.ajax({
+        url: '/chat/' + paramOne,
+        type: 'POST',
+        data: {
+          message: message
+        },
+        success: function(){
+          $('#msg').val('');
+        }
+      });
+    }
   });
 });
 //value_1 si value_2 is indecsi, pur si simplu vrea sa le inverseze
