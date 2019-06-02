@@ -62,7 +62,7 @@ socket.on('new message', function(data){
   //face vrajeala asta pt a salva mesajul cand se apasa pe Send, da ii acelasi lucru ca si cum ar fi pus functionalitatea mai sus, in form.submit, pt ca se declanseaza deodata
   $('#send-message').on('click', function(){
     var message = $('#msg').val();
-    if(msg.replace(/\s/g, '').length > 0){
+    if(message.replace(/\s/g, '').length > 0){
       $.ajax({
         url: '/chat/' + paramOne,
         type: 'POST',

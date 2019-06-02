@@ -39,4 +39,8 @@ $(document).ready(function(){
       $('.onlineFriends').html(ol);
     }
   });
+
+  $('#val').on('click', function(){
+    console.log('just clicked');
+  });
 });
