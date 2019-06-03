@@ -7,6 +7,7 @@ module.exports = function(async, Users, Message, FriendResult){
     getInterestPage: function(req, res){
       async.parallel([
         function(callback){
+          console.log(req.user.username);
           Users.findOne({'username':req.user.username})//search for the user
             .populate('request.userId')//for that particular user, if the user already has a friend request, is going to populate that field userId, with all the data of the user that send the friend request
             .exec((err, result) => {

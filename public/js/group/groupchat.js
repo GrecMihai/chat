@@ -31,7 +31,7 @@ $(document).ready(function(){
 
       $('#name').text($(this).text());//this get the text from the currently clicked element
       $('#receiverName').val($(this).text());//ceva valoare hidden, utilizata la emitere la socket io
-      $('#nameLink').attr("href", "/profile/"+$(this).text());//pentru cand apesi pe butonul de profil, sa te duca la el
+      $('#nameLink').attr("href", "/profile/"+$(this).text().replace(/ /g,"-"));//pentru cand apesi pe butonul de profil, sa te duca la el
     });
 
     $('#users').html(ol);
