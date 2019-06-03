@@ -5,48 +5,53 @@ module.exports = function(async, Users, Message, FriendResult){
       router.post('/settings/interests', this.postInterestPage)
     },
     getInterestPage: function(req, res){
-      async.parallel([
-        function(callback){
-          console.log(req.user.username);
-          Users.findOne({'username':req.user.username})//search for the user
-            .populate('request.userId')//for that particular user, if the user already has a friend request, is going to populate that field userId, with all the data of the user that send the friend request
-            .exec((err, result) => {
-              callback(err, result);
-            });
-        },
-        function(callback){
-          const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
-          Message.aggregate(
-            {$match:{$or:[{'sender':req.user._id},
-            {'receiver':req.user._id}]}},//ia toate mesajele in care apare senderul
-            {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
-            {
-              $group:{"_id":{
-                //this is a message that we create
-                "last_message_between":{
-                  $concat:["user1"," and ", " user2"]
-                }
-              }, "body":{$first:"$$ROOT"}
-              }
-            }, function(err, newResult){
-              //callback(err, newResult);
-              const arr = [
-                {path:'body.sender', model: 'User'},
-                {path:'body.receiver', model: 'User'}
-              ];
-
-              Message.populate(newResult, arr, (err, newResult1) => {
-                //console.log(newResult1);
-                callback(err, newResult1);
+      if(typeof req.user !== "undefined"){
+        async.parallel([
+          function(callback){
+            //console.log(req.user.username);
+            Users.findOne({'username':req.user.username})//search for the user
+              .populate('request.userId')//for that particular user, if the user already has a friend request, is going to populate that field userId, with all the data of the user that send the friend request
+              .exec((err, result) => {
+                callback(err, result);
               });
-            }
-          )
-        },
-      ], (err, results) => {
-        const result1 = results[0];
-        const result2 = results[1];
-        res.render('user/interest', {title: 'SPORTbabble - Interests', user:req.user, data:result1, chat:result2});
-      });
+          },
+          function(callback){
+            const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
+            Message.aggregate(
+              {$match:{$or:[{'sender':req.user._id},
+              {'receiver':req.user._id}]}},//ia toate mesajele in care apare senderul
+              {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
+              {
+                $group:{"_id":{
+                  //this is a message that we create
+                  "last_message_between":{
+                    $concat:["user1"," and ", " user2"]
+                  }
+                }, "body":{$first:"$$ROOT"}
+                }
+              }, function(err, newResult){
+                //callback(err, newResult);
+                const arr = [
+                  {path:'body.sender', model: 'User'},
+                  {path:'body.receiver', model: 'User'}
+                ];
+
+                Message.populate(newResult, arr, (err, newResult1) => {
+                  //console.log(newResult1);
+                  callback(err, newResult1);
+                });
+              }
+            )
+          },
+        ], (err, results) => {
+          const result1 = results[0];
+          const result2 = results[1];
+          res.render('user/interest', {title: 'SPORTbabble - Interests', user:req.user, data:result1, chat:result2});
+        });
+      }
+      else{
+        res.render('error');
+      }
     },
     postInterestPage: function(req, res){
       FriendResult.PostRequest(req, res, '/settings/interests');
