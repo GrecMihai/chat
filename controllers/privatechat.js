@@ -33,14 +33,22 @@ module.exports = function(async, Users, Message, FriendResult){
                 function(callback){
                   const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
                   Message.aggregate(
-                    {$match:{$or:[{'sender':req.user._id},
-                    {'receiver':req.user._id}]}},//ia toate mesajele in care apare senderul
+                    {$match:{$or:[{'senderName':nameRegex},
+                    {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
                     {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
                     {
                       $group:{"_id":{
                         //this is a message that we create
                         "last_message_between":{
-                          $concat:["user1"," and ", " user2"]
+                          $cond:[
+                              {
+                                  $gt:[
+                                  {$substr:["$senderName",0,1]},
+                                  {$substr:["$receiverName",0,1]}]
+                              },
+                              {$concat:["$senderName"," and ","$receiverName"]},
+                              {$concat:["$receiverName"," and ","$senderName"]}
+                          ]
                         }
                       }, "body":{$first:"$$ROOT"}
                       }
@@ -72,7 +80,11 @@ module.exports = function(async, Users, Message, FriendResult){
                 }
               ], (err, results) => {
                 const result1 = results[0];
-                const result2 = results[1];
+                const result2 = results[1].sort(function compare(a, b) {
+                  var dateA = new Date(a.body.createdAt);
+                  var dateB = new Date(b.body.createdAt);
+                  return dateB - dateA;
+                });
                 const result3 = results[2];
                 const params = req.params.name.split('.');
                 const nameParams = params[0].replace(/-/g, " ");//this is the receiver name
@@ -110,6 +122,8 @@ module.exports = function(async, Users, Message, FriendResult){
             const newMessage = new Message();
             newMessage.sender = req.user._id;//in req.user se stocheaza datele de la useurl logat, based on passport that we used
             newMessage.receiver = data._id;
+            newMessage.senderName = req.user.username;
+            newMessage.receiverName = data.username;
             newMessage.message = req.body.message;
             newMessage.createdAt = new Date();//now
             newMessage.save((err, result) => {

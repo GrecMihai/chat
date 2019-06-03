@@ -21,14 +21,22 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
           function(callback){
             const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
             Message.aggregate(
-              {$match:{$or:[{'sender':req.user._id},
-              {'receiver':req.user._id}]}},//ia toate mesajele in care apare senderul
+              {$match:{$or:[{'senderName':nameRegex},
+              {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
               {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
               {
                 $group:{"_id":{
                   //this is a message that we create
                   "last_message_between":{
-                    $concat:["user1"," and ", " user2"]
+                    $cond:[
+                        {
+                            $gt:[
+                            {$substr:["$senderName",0,1]},
+                            {$substr:["$receiverName",0,1]}]
+                        },
+                        {$concat:["$senderName"," and ","$receiverName"]},
+                        {$concat:["$receiverName"," and ","$senderName"]}
+                    ]
                   }
                 }, "body":{$first:"$$ROOT"}
                 }
@@ -48,7 +56,11 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
           },
         ], (err, results) => {
           const result1 = results[0];
-          const result2 = results[1];
+          const result2 = results[1].sort(function compare(a, b) {
+            var dateA = new Date(a.body.createdAt);
+            var dateB = new Date(b.body.createdAt);
+            return dateB - dateA;
+          });
           res.render('user/profile', {title: 'SPORTbabble - Profile', user:req.user, data:result1, chat:result2});
         });
       }
@@ -63,7 +75,8 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
         function(callback){
           var userExists = false;
           if(req.body.username !== req.user.username){
-            const nameRegex = new RegExp("^"+req.body.username.toLowerCase(), "i");
+
+            const nameRegex = new RegExp("^"+req.body.username.toLowerCase()+"$", "i");
             Users.findOne({'username': nameRegex}, (err, user1) =>{
               if(err){
                 return done(err);
@@ -71,6 +84,30 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
               //if the username already exist
               if(user1){
                 userExists = true;
+              }
+              else{
+                Message.update(
+                  {
+                    'receiverName': req.user.username
+                  },
+                  {
+                    'receiverName': req.body.username
+                  },
+                  {
+                    "multi": true
+                  }, (err, upd) => {
+                  });
+                  Message.update(
+                    {
+                      'senderName': req.user.username
+                    },
+                    {
+                      'senderName': req.body.username
+                    },
+                    {
+                      "multi": true
+                    }, (err, upd) => {
+                    });
               }
               callback(null, userExists);
             });
@@ -93,6 +130,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
         //update the data
         function(result1, callback){
           if(!result1.userExists){
+            req.user.username = req.body.username;
             //if the user has not changed the image, we will take the image it already is in the database
             if(req.body.upload === null || req.body.upload === ''){
               Users.update({
@@ -173,11 +211,11 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
                   //this is a message that we create
                   "last_message_between":{
                     $cond:[
-                      {
-                        $gt:[//get the sender and receiver name
-                          {$substr:["$senderName", 0, 1]},
-                          {$substr:["$receiverName", 0, 1]}]
-                      },
+                        {
+                            $gt:[
+                            {$substr:["$senderName",0,1]},
+                            {$substr:["$receiverName",0,1]}]
+                        },
                         {$concat:["$senderName"," and ","$receiverName"]},
                         {$concat:["$receiverName"," and ","$senderName"]}
                     ]
@@ -192,7 +230,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
                 ];
 
                 Message.populate(newResult, arr, (err, newResult1) => {
-                  //console.log(newResult1[0].body.sender);
+                  //console.log(newResult1);
                   callback(err, newResult1);
                 });
               }
@@ -200,7 +238,11 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
           },
         ], (err, results) => {
           const result1 = results[0];
-          const result2 = results[1];
+          const result2 = results[1].sort(function compare(a, b) {
+            var dateA = new Date(a.body.createdAt);
+            var dateB = new Date(b.body.createdAt);
+            return dateB - dateA;
+          });
           res.render('user/overview', {title: 'SPORTbabble - Overview', user:req.user, data:result1, chat:result2});
         });
       }
