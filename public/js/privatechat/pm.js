@@ -7,6 +7,7 @@ $(document).ready(function(){
   var newParam = paramOne.split('.');
   var username = newParam[0];//the receiver
   $('#receiver_name').text(username.replace(/-/g, " "));
+  $("#rec_button").attr("href", "/profile/" + username);
 
   swap(newParam, 0, 1);//inverseaza cele 2 nume, astfel incat sa fie sender.receiver
   var paramTwo = newParam[0]+'.'+newParam[1];//aici va fi sender.receiver
