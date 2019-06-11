@@ -45,15 +45,26 @@
                                     <p class="text-left drop-name">
 
                                         <% if(user.username !== val.body.receiver.username){ %>
-
+                                          <% if(val.body.isRead === true){ %>
+                                          <%= val.body.receiver.username %>
+                                          <% }else{ %>
                                           <strong><%= val.body.receiver.username %></strong>
+                                          <% } %>
                                         <% } else{ %>
+                                          <% if(val.body.isRead === true){ %>
+                                          <%= val.body.sender.username %>
+                                          <% }else{ %>
                                           <strong><%= val.body.sender.username %></strong>
+                                          <% } %>
                                         <% } %>
                                     </p>
                                     <input type="hidden" name="chatId" value="chatId" value="<%= val.body._id %>">
 
+                                    <% if(val.body.isRead === true){ %>
                                     <%= val.body.message %>
+                                    <% }else{ %>
+                                    <strong><%= val.body.message %></strong>
+                                    <% } %>
                                     <% if(val.body.isRead === true){ %>
                                       <i class="fa fa-circle-thin" style="position:absolute;right:0;transform: scale(0.7);"></i>
                                     <% }else{ %>
@@ -80,9 +91,13 @@
                                   <div class="col-md-12" id="textRow">
                                       <p class="text-left drop-name">
                                           <% if(user.username !== val.body.receiver.username){ %>
-                                            <strong><%= val.body.receiver.username %></strong>
+                                            <%= val.body.receiver.username %>
                                           <% } else{ %>
+                                            <% if(val.body.isRead === false){ %>
                                             <strong><%= val.body.sender.username %></strong>
+                                            <% }else{ %>
+                                              <%= val.body.sender.username %>
+                                            <% } %>
                                           <% } %>
                                       </p>
                                       <input type="hidden" name="chatId" value="chatId" value="<%= val.body._id %>">
