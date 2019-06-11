@@ -75,7 +75,9 @@
            }
          ], (err, results) => {
            //get the result of all functions
-           const res1 = results[0];
+           const res1 = results[0].sort(function compare(a, b) {
+             return b.fans.length - a.fans.length;
+           });;
            const res2 = results[1];
            const res3 = results[2];
            const res4 = results[3].sort(function compare(a, b) {
