@@ -5,6 +5,8 @@ module.exports = function(async, Club, Users, Message, _){
       router.post('/results', this.postResults);
       router.get('/members', this.viewMembers);
       router.post('/members', this.searchMembers);
+      router.get('/friends', this.viewFriends);
+      router.post('/friends', this.viewFriends);
     },
     getResults: function(req, res){
       if(typeof req.user !== "undefined"){
@@ -167,6 +169,31 @@ module.exports = function(async, Club, Users, Message, _){
         }
         res.render('members', {title: 'SPORTbabble - Members', chunks: dataChunk, user: req.user});
       })
+    },
+    viewFriends: function(req, res){
+      if(typeof req.user !== "undefined"){
+        async.parallel([
+          function(callback){
+            Users.find({'username':req.user.username})
+            .populate('friendsList.friendId')
+            .exec((err, result) => {
+              callback(err, result);
+            });
+          }
+        ], (err, results) => {
+          const res1 = results[0][0].friendsList;
+          const dataChunk = [];
+          const chunkSize = 4;
+          for(let i = 0; i < res1.length; i+=chunkSize){
+            dataChunk.push(res1.slice(i, i + chunkSize));
+          }
+          res.render('friends', {title: 'SPORTbabble - Friends', chunks: dataChunk, user: req.user});
+        })
+        }
+      else{
+        res.render('error');
+      }
     }
+
   }
 }
