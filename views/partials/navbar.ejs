@@ -14,7 +14,7 @@
       <ul class="nav navbar-nav navbar-right" id="reload">
         <li>
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        		<span class="glyphicon fa fa-bell nav-glyphicon"></span><b class="caret"></b>
+        		<span class="glyphicon fa fa-users nav-glyphicon"></span><b class="caret"></b>
                 <% if(data.totalRequest > 0){%>
                   <span class="label label-primary nav-label-icon"  ><%= data.totalRequest%></span>
                 <%} else{ %>
@@ -90,7 +90,6 @@
           <%- include message.ejs %>
         </li>
 
-        <li><a href="/members">Members</a></li>
         <li><a href="/friends">Friends</a></li>
         <li class="dropdown">
           <!-- Mai jos tu ai adaugat vrajeala de la valoare, ca FB si Google nu aveau initial si username, numa fullname-->

@@ -3,8 +3,6 @@ module.exports = function(async, Club, Users, Message, _){
     SetRouting: function(router){
       router.get('/results', this.getResults);
       router.post('/results', this.postResults);
-      router.get('/members', this.viewMembers);
-      router.post('/members', this.searchMembers);
       router.get('/friends', this.viewFriends);
       router.post('/friends', this.viewFriends);
     },
@@ -25,16 +23,66 @@ module.exports = function(async, Club, Users, Message, _){
           Club.find({'$or': [{'country':regex}, {'name':regex}, {'sport':regex}]}, (err, result) => {
             callback(err, result);
           })
+        },
+        function(callback){
+          //console.log(req.user.username);
+          Users.findOne({'username':req.user.username})//search for the user
+            .populate('request.userId')//for that particular user, if the user already has a friend request, is going to populate that field userId, with all the data of the user that send the friend request
+            .exec((err, result) => {
+              callback(err, result);
+            });
+        },
+        function(callback){
+          const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
+          Message.aggregate(
+            {$match:{$or:[{'senderName':nameRegex},
+            {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
+            {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
+            {
+              $group:{"_id":{
+                //this is a message that we create
+                "last_message_between":{
+                  $cond:[
+                      {
+                          $gt:[
+                          {$substr:["$senderName",0,1]},
+                          {$substr:["$receiverName",0,1]}]
+                      },
+                      {$concat:["$senderName"," and ","$receiverName"]},
+                      {$concat:["$receiverName"," and ","$senderName"]}
+                  ]
+                }
+              }, "body":{$first:"$$ROOT"}
+              }
+            }, function(err, newResult){
+              //callback(err, newResult);
+              const arr = [
+                {path:'body.sender', model: 'User'},
+                {path:'body.receiver', model: 'User'}
+              ];
+
+              Message.populate(newResult, arr, (err, newResult1) => {
+                //console.log(newResult1);
+                callback(err, newResult1);
+              });
+            }
+          )
         }
       ], (err, results) => {
         const res1 = results[0];
+        const res2 = results[1];
+        const res3 = results[2].sort(function compare(a, b) {
+          var dateA = new Date(a.body.createdAt);
+          var dateB = new Date(b.body.createdAt);
+          return dateB - dateA;
+        });
 
         const dataChunk = [];
         const chunkSize = 4;
         for(let i = 0; i < res1.length; i+=chunkSize){
           dataChunk.push(res1.slice(i, i + chunkSize));
         }
-        res.render('results', {title: 'SPORTbabble - Results', chunks: dataChunk, user: req.user});
+        res.render('results', {title: 'SPORTbabble - Results', chunks: dataChunk, user: req.user, data:res2, chat:res3});
       })
     }
     else{
@@ -128,48 +176,6 @@ module.exports = function(async, Club, Users, Message, _){
      }
     }
     },
-    viewMembers: function(req, res){
-      if(typeof req.user !== "undefined"){
-        async.parallel([
-          function(callback){
-            Users.find({}, (err, result) => {
-              callback(err, result);
-            })
-          }
-        ], (err, results) => {
-          const res1 = results[0];
-
-          const dataChunk = [];
-          const chunkSize = 4;
-          for(let i = 0; i < res1.length; i+=chunkSize){
-            dataChunk.push(res1.slice(i, i + chunkSize));
-          }
-          res.render('members', {title: 'SPORTbabble - Members', chunks: dataChunk, user: req.user});
-        })
-        }
-      else{
-        res.render('error');
-      }
-    },
-    searchMembers: function(req, res){
-      async.parallel([
-        function(callback){
-          const regex = new RegExp((req.body.username), 'gi');
-          Users.find({'username':regex}, (err, result) => {
-            callback(err, result);
-          })
-        }
-      ], (err, results) => {
-        const res1 = results[0];
-
-        const dataChunk = [];
-        const chunkSize = 4;
-        for(let i = 0; i < res1.length; i+=chunkSize){
-          dataChunk.push(res1.slice(i, i + chunkSize));
-        }
-        res.render('members', {title: 'SPORTbabble - Members', chunks: dataChunk, user: req.user});
-      })
-    },
     viewFriends: function(req, res){
       if(typeof req.user !== "undefined"){
         async.parallel([
@@ -179,15 +185,65 @@ module.exports = function(async, Club, Users, Message, _){
             .exec((err, result) => {
               callback(err, result);
             });
+          },
+          function(callback){
+            //console.log(req.user.username);
+            Users.findOne({'username':req.user.username})//search for the user
+              .populate('request.userId')//for that particular user, if the user already has a friend request, is going to populate that field userId, with all the data of the user that send the friend request
+              .exec((err, result) => {
+                callback(err, result);
+              });
+          },
+          function(callback){
+            const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
+            Message.aggregate(
+              {$match:{$or:[{'senderName':nameRegex},
+              {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
+              {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
+              {
+                $group:{"_id":{
+                  //this is a message that we create
+                  "last_message_between":{
+                    $cond:[
+                        {
+                            $gt:[
+                            {$substr:["$senderName",0,1]},
+                            {$substr:["$receiverName",0,1]}]
+                        },
+                        {$concat:["$senderName"," and ","$receiverName"]},
+                        {$concat:["$receiverName"," and ","$senderName"]}
+                    ]
+                  }
+                }, "body":{$first:"$$ROOT"}
+                }
+              }, function(err, newResult){
+                //callback(err, newResult);
+                const arr = [
+                  {path:'body.sender', model: 'User'},
+                  {path:'body.receiver', model: 'User'}
+                ];
+
+                Message.populate(newResult, arr, (err, newResult1) => {
+                  //console.log(newResult1);
+                  callback(err, newResult1);
+                });
+              }
+            )
           }
         ], (err, results) => {
           const res1 = results[0][0].friendsList;
+          const res2 = results[1];
+          const res3 = results[2].sort(function compare(a, b) {
+            var dateA = new Date(a.body.createdAt);
+            var dateB = new Date(b.body.createdAt);
+            return dateB - dateA;
+          });
           const dataChunk = [];
           const chunkSize = 4;
           for(let i = 0; i < res1.length; i+=chunkSize){
             dataChunk.push(res1.slice(i, i + chunkSize));
           }
-          res.render('friends', {title: 'SPORTbabble - Friends', chunks: dataChunk, user: req.user});
+          res.render('friends', {title: 'SPORTbabble - Friends', chunks: dataChunk, user: req.user, data:res2, chat:res3});
         })
         }
       else{
