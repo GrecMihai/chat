@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt-nodejs');
+
 module.exports = function(async, Users, Message, aws, formidable, FriendResult){
   return {
     SetRouting: function(router){
@@ -7,6 +9,8 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
       router.post('/settings/profile', this.postProfilePage);
       router.post('/profile/:name', this.overviewPostPage);
       router.post('/userupload', aws.Upload.any(), this.userUpload);
+
+      router.put('/settings/profile', this.putProfilePage);
     },
     getProfilePage: function(req, res){
       if(typeof req.user !== "undefined"){
@@ -252,6 +256,32 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
     },
     overviewPostPage: function(req, res){
       FriendResult.PostRequest(req, res, '/profile/' + req.params.name);
+    },
+    putProfilePage: function(req, res){
+      if(req.user.password !== ''){
+        if(bcrypt.compareSync(req.body.old_password, req.user.password)){
+          //bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
+          if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(req.body.new_password) && req.body.old_password !== req.body.new_password){
+            Users.update({
+              '_id':req.user._id
+            },
+            {
+              password: bcrypt.hashSync(req.body.new_password, bcrypt.genSaltSync(10), null)
+            }, (err, result) => {
+              console.log("success");
+            });
+          }
+          else{
+            console.log("password too weak");
+          }
+        }
+        else{
+          console.log("Not same password");
+        }
+      }
+      else{
+        console.log("Logged in with facebook or google");
+      }
     }
   }
 }

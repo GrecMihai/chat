@@ -31,6 +31,24 @@ $(document).ready(function(){
     ShowImage(this);
   });
 
+  $('#password_button').on('click', function(){
+    var old_password = $('#old_password').val();
+    var new_password = $('#new_password').val();
+    $.ajax({
+      url: '/settings/profile',
+      type: 'PUT',
+      data: {
+        old_password: old_password,
+        new_password: new_password
+      }
+    })
+    setTimeout(function(){
+      $('#old_password').val('');
+      $('#new_password').val('');
+      window.scrollTo(0,0);
+    }, 200);
+  });
+
   $('#profile').on('click', function(){
     var username = $('#username').val();
     var fullname = $('#fullname').val();

@@ -156,6 +156,18 @@
                                 <input type="submit" id="profile" value="SAVE PROFILE" class="btn btn-lg btn-default btn-block save-profile-btn" name="submit" style="background-color:#4aa1f3 !important; color:white !important">
 
                             </form>
+                            <hr />
+                            <h3 style="margin-top:0px; color:#4aa1f3 !important">Password Reset</h3>
+                            <hr />
+                            <br>
+                            <label style="color:#4aa1f3 !important">Old Password</label>
+                            <p style="color:LightGrey;font-size:12px;">*Not available for users logged in with Facebook or Google</p>
+                            <input class="form-control input-lg" type="password" id="old_password">
+                            <br>
+                            <label style="color:#4aa1f3 !important">New Password</label>
+                            <input class="form-control input-lg" type="password" id="new_password">
+                            <br>
+                            <input type="submit" id="password_button" value="CHANGE PASSWORD" class="btn btn-lg btn-block" name="submit" style="background-color:#4aa1f3 !important; color:white !important">
 
                         </div>
 
@@ -175,7 +187,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/messagelink.js"></script>
-<script src="/js/group/groupchat.js"></script>
 <script src="/js/group/sendRequest.js"></script>
 <script src="/js/user/profile.js"></script>
 <script src="/js/global.js"></script>
