@@ -151,7 +151,6 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
               },
               {
                 username: req.body.username,
-                fullname: req.body.fullname,
                 mantra: req.body.mantra,
                 gender: req.body.gender,
                 country: req.body.country,
@@ -168,7 +167,6 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
               },
               {
                 username: req.body.username,
-                fullname: req.body.fullname,
                 mantra: req.body.mantra,
                 gender: req.body.gender,
                 country: req.body.country,

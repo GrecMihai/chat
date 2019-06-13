@@ -84,7 +84,6 @@
             <% if(hasErrors) { %>
               <!-- toate clasele de mai jos sunt bootstrap classes-->
               <div class="alert alert-danger text-center">
-                <a href="#" class="close" date-dismiss="alert" aria-label="close">&times</a>
                 <%  _.forEach(messages, function(error){ %>
                   <%= error %><br>  <!-- daca adaugi acel egal, o sa iti afiseze ce e in interiorul ejs tag-->
                 <% }) %>

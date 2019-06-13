@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt-nodejs');
 //asa va arata in baza de date Userul
 const userSchema = mongoose.Schema({
   username: {type: String},
-  fullname: {type: String},
   email: {type: String},
   password: {type: String, default: ''},
   userImage: {type:String, default: 'default.png'},

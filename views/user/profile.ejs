@@ -38,11 +38,9 @@
 
                                     <div class="profile-usertitle">
                                         <div class="profile-usertitle-name">
-                                            <%= user.fullname %>
+                                            <p style="color:#4aa1f3;"><%= data.username %></p>
                                         </div>
-                                        <div class="profile-usertitle-job">
-                                            <%= user.username %>
-                                        </div>
+
                                     </div>
 
                                     <div class="profile-usermenu">
@@ -94,11 +92,6 @@
                                       <p style="color:LightGrey;font-size:12px;">*if the username doesn't change, it means that it already exists</p>
                                       <input id="username" class="form-control input-lg" name="username" type="text" placeholder="Fullname" value="<%= user.username %>">
                                   </div>
-
-                                    <div class="col-md-12">
-                                        <label style="color:#4aa1f3 !important">Fullname</label>
-                                        <input id="fullname" class="form-control input-lg" name="fullname" type="text" placeholder="Fullname" value="<%= user.fullname %>">
-                                    </div>
 
                                     <div class="col-md-12">
                                         <label style="color:#4aa1f3 !important">Country</label>

@@ -39,7 +39,6 @@ passport.use(new GoogleStrategy({
     const newUser = new User();
     newUser.google = profile.id;
     newUser.username = profile.displayName;//FACE ASTA DOAR CA SA NU IL LASE GOL
-    newUser.fullname = profile.displayName;
     newUser.userImage = profile._json.picture;
     newUser.userImage = "default.png";
     newUser.email = profile.emails[0].value;

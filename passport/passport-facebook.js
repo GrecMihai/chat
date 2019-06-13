@@ -43,7 +43,6 @@ passport.use(new FacebookStrategy({
     const newUser = new User();
     newUser.facebook = profile.id;
     newUser.username = profile.displayName;//FACE ASTA CA SA NU FIE EMPTY
-    newUser.fullname = profile.displayName;
     newUser.email = profile._json.email;
     newUser.userImage = 'default.png';
     newUser.fbTokens.push({token:token});

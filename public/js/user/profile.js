@@ -53,7 +53,6 @@ $(document).ready(function(){
 
   $('#profile').on('click', function(){
     var username = $('#username').val();
-    var fullname = $('#fullname').val();
     var country = $('#country').val();
     var gender = $('#gender').val();
     var mantra = $('#mantra').val();
@@ -65,7 +64,7 @@ $(document).ready(function(){
       $('#add-input').val(image);
     }
 
-    if(username == '' || fullname == '' || country =='' || gender == '' || mantra == ''){
+    if(username == '' || country =='' || gender == '' || mantra == ''){
       valid = false;
       $('#error').html('<div class="alert alert-danger"> You can not submit an empty field </div>');
     }
@@ -79,7 +78,6 @@ $(document).ready(function(){
         type: 'POST',
         data: {
           username: username,
-          fullname: fullname,
           country: country,
           gender: gender,
           mantra: mantra,
