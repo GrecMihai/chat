@@ -15,7 +15,10 @@ module.exports = function(async, Club, Users, Message, _){
       }
     },
     postResults: function(req, res){
-      if(req.body.country.length > 0){
+      if(/^\S*$/.test(req.body.country) === false){
+        res.redirect('/home');
+      }
+      else if(req.body.country.length > 0){
       async.parallel([
         function(callback){
           const regex = new RegExp((req.body.country), 'gi');
@@ -69,7 +72,9 @@ module.exports = function(async, Club, Users, Message, _){
           )
         }
       ], (err, results) => {
-        const res1 = results[0];
+        const res1 = results[0].sort(function compare(a, b) {
+          return b.fans.length - a.fans.length;
+        });
         const res2 = results[1];
         const res3 = results[2].sort(function compare(a, b) {
           var dateA = new Date(a.body.createdAt);
@@ -152,7 +157,9 @@ module.exports = function(async, Club, Users, Message, _){
           }
         ], (err, results) => {
           //get the result of all functions
-          const res1 = results[0];
+          const res1 = results[0].sort(function compare(a, b) {
+            return b.fans.length - a.fans.length;
+          });
           const res2 = results[1];
           const res3 = results[2];
           const res4 = results[3].sort(function compare(a, b) {

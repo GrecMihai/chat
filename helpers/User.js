@@ -6,6 +6,7 @@ module.exports = function(){
       //metodele notEmpty, isLength sunt din express validator
       req.checkBody('username', 'Username is Required').notEmpty();//this function takes the name of the input field from frontend(<input.... name = ""), and second parameter is the message send to frontend
       req.checkBody('username', 'Username must not be less than 5').isLength({min: 5});
+      req.checkBody('username', 'Username cannot be empty(spaces, tabs, enters)').matches(/^\S*$/, "i");
       req.checkBody('email', 'Email is Required').notEmpty();
       req.checkBody('email', 'Email is invalid').isEmail();
       req.checkBody('password', 'Password is Required').notEmpty();

@@ -61,9 +61,18 @@
                                     <input type="hidden" name="chatId" value="chatId" value="<%= val.body._id %>">
 
                                     <% if(val.body.isRead === true){ %>
-                                    <%= val.body.message %>
+                                    <% if(val.body.message.length > 20){ %>
+                                      <%= val.body.message.substring(0,19) + "..." %>
                                     <% }else{ %>
-                                    <strong><%= val.body.message %></strong>
+                                      <%= val.body.message %>
+                                    <% } %>
+                                    <% }else{ %>
+                                      <% if(val.body.message.length > 20){ %>
+                                        <strong><%= val.body.message.substring(0,19) + "..." %></strong>
+                                      <% }else{ %>
+                                        <strong><%= val.body.message %></strong>
+                                      <% } %>
+
                                     <% } %>
                                     <% if(val.body.isRead === true){ %>
                                       <i class="fa fa-circle-thin" style="position:absolute;right:0;transform: scale(0.7);"></i>
@@ -102,7 +111,11 @@
                                       </p>
                                       <input type="hidden" name="chatId" value="chatId" value="<%= val.body._id %>">
                                       <i class="fa fa-reply"></i>
-                                      <%= val.body.message %>
+                                      <% if(val.body.message.length > 20){ %>
+                                        <%= val.body.message.substring(0,19) + "..." %>
+                                      <% }else{ %>
+                                        <%= val.body.message %>
+                                      <% } %>
                                   </div>
                               </div>
                           </div>
