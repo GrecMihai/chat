@@ -82,6 +82,7 @@
                         <div class="profile-signup">
                           <span id="error" class="text-center"></span><!-- the error field -->
 
+
                             <form class="form" role="form" method="POST" id="form" action="#">
 
                                 <h3 style="margin-top:0px; color:#4aa1f3 !important">Personal Information</h3>
@@ -159,6 +160,13 @@
                             <hr />
                             <h3 style="margin-top:0px; color:#4aa1f3 !important">Password Reset</h3>
                             <hr />
+                            <% if(typeof msg[0] !== "undefined"){ %>
+                            <div class="alert alert-danger text-center">
+                              <%= msg[0] %>
+                            </div>
+                            <% } %>
+
+
                             <br>
                             <label style="color:#4aa1f3 !important">Old Password</label>
                             <p style="color:LightGrey;font-size:12px;">*Not available for users logged in with Facebook or Google</p>
