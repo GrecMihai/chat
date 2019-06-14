@@ -81,7 +81,7 @@
                           <span id="error" class="text-center"></span><!-- the error field -->
 
 
-                            <form class="form" role="form" method="POST" id="form" action="#">
+                          <!--  <form class="form" role="form" method="POST" id="profile_form" action="#"> -->
 
                                 <h3 style="margin-top:0px; color:#4aa1f3 !important">Personal Information</h3>
                                 <hr />
@@ -91,11 +91,13 @@
                                       <label style="color:#4aa1f3 !important">Username</label>
                                       <p style="color:LightGrey;font-size:12px;">*if the username doesn't change, it means that it already exists</p>
                                       <input id="username" class="form-control input-lg" name="username" type="text" placeholder="Fullname" value="<%= user.username %>">
+                                      <br>
                                   </div>
 
                                     <div class="col-md-12">
                                         <label style="color:#4aa1f3 !important">Country</label>
                                         <input id="country" class="form-control input-lg" name="country" type="text" placeholder="Country" value="<%= user.country %>">
+                                        <br>
                                     </div>
 
                                 </div>
@@ -135,6 +137,7 @@
                                 <div class="" style="margin-top:20px">
                                 <label style="color:#4aa1f3 !important">Description</label><br>
                                     <textarea name="mantra" id="mantra" class="form-control input-lg" rows="5" placeholder="A one liner sentence"><%= user.mantra %></textarea>
+                                    <br>
                                 </div>
 
                           <!--      <label style="color:#4aa1f3 !important">Club You Support</label><br> -->
@@ -149,7 +152,7 @@
 
                                 <input type="submit" id="profile" value="SAVE PROFILE" class="btn btn-lg btn-default btn-block save-profile-btn" name="submit" style="background-color:#4aa1f3 !important; color:white !important">
 
-                            </form>
+                          <!--  </form> -->
                             <hr />
 
                             <h3 style="margin-top:0px; color:#4aa1f3 !important">Password Reset</h3>

@@ -83,6 +83,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
     },
     postProfilePage:function(req, res){
 
+
       FriendResult.PostRequest(req, res, '/settings/profile');
       async.waterfall([
         function(callback){
@@ -142,6 +143,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
         },
         //update the data
         function(result1, callback){
+          var ext = req.body.upload.split('.');
           if(!result1.userExists){
             req.user.username = req.body.username;
             //if the user has not changed the image, we will take the image it already is in the database
@@ -153,8 +155,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
                 username: req.body.username,
                 mantra: req.body.mantra,
                 gender: req.body.gender,
-                country: req.body.country,
-                userImage: result1.result.userImage
+                country: req.body.country
               },
               {
                 upsert: true//if the field does not already exist in the document, is going to add it to the particular value
@@ -170,7 +171,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
                 mantra: req.body.mantra,
                 gender: req.body.gender,
                 country: req.body.country,
-                userImage: req.body.upload
+                userImage: req.user.username + '.' + ext[ext.length - 1]
               },
               {
                 upsert: true//if the field does not already exist in the document, is going to add it to the particular value

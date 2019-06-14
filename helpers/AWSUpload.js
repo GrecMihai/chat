@@ -19,7 +19,8 @@ const upload = multer({//ca la vesna
       cb(null, {fieldName: file.fieldname});
     },
     key(req, file, cb){
-      cb(null, file.originalname);
+      var ext = file.originalname.split('.');
+      cb(null, req.user.username + '.' + ext[ext.length - 1]);
     }
 
   })

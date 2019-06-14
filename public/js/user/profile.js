@@ -52,18 +52,20 @@ $(document).ready(function(){
   });
 
   $('#profile').on('click', function(){
-    var username = $('#username').val();
-    var country = $('#country').val();
+    var username = $('#username').val().replace(/^\s+/g, '');
+    var country = $('#country').val().replace(/^\s+/g, '');
     var gender = $('#gender').val();
-    var mantra = $('#mantra').val();
+    var mantra = $('#mantra').val().replace(/^\s+/g, '');
     var userImage = $('#add-input').val();
     var image = $('#user-image').val();
 
     var valid = true;
+    /*
     if(userImage === ''){
       $('#add-input').val(image);
     }
-
+    */
+    console.log(username);
     if(username == '' || country =='' || gender == '' || mantra == ''){
       valid = false;
       $('#error').html('<div class="alert alert-danger"> You can not submit an empty field </div>');
