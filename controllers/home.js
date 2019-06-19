@@ -116,12 +116,23 @@
              //console.log(count);
              callback(err, count);
            });
+         },
+
+         function(callback){
+           Users.update({
+             '_id': req.user._id
+           },{
+             $push: {favPlayers: {
+               playerName: req.body.clubName
+             }}
+           }, (err, count) => {
+             callback(err, count);
+           });
          }
 
        ], (err, results) => {
          res.redirect('/home');
        });
-
        FriendResult.PostRequest(req, res, '/home');
      },
      logout: function(req, res){

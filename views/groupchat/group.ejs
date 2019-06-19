@@ -49,7 +49,7 @@
                                                 </div>
                                                 <div class="footer">
                                                     <i class="fa fa-mail-forward"></i>
-                                                    <a style="text-decoration: none" href="/profile/<%= user.username %>">
+                                                    <a style="text-decoration: none" href="/profile/<%= user.username.replace(/ /, "-") %>">
                                                       View My Profile
                                                     </a>
                                                 </div>
