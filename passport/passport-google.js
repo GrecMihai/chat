@@ -23,7 +23,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
   clientID: secret.google.clientID,
   clientSecret: secret.google.clientSecret,
-  callbackURL: 'http://localhost:3000/auth/google/callback',
+  callbackURL: 'https://localhost:443/auth/google/callback',
   passReqToCallback: true
   //token will contain a facebook token that will be generated, and profile will contain all the infos
 }, (req, accessToken, refreshToken, profile, done) => {

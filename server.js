@@ -3,6 +3,8 @@ const express = require('express');
 const ejs = require('ejs');//templating engine(???)
 const bodyParser = require('body-parser');
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const validator = require('express-validator');
 const session = require('express-session');
@@ -14,9 +16,10 @@ const socketIO = require('socket.io');
 const {Users} = require('./helpers/UsersClass');//asa se face la clase
 const {Global} = require('./helpers/Global');
 
+
 const container = require('./container');
 
-container.resolve(function(users, _, admin, home, group, results, privatechat, profile, interest){
+container.resolve(function(users, _, admin, home, group, results, privatechat, profile){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
   mongoose.connect('mongodb://localhost/chat');//added path to the database
@@ -26,11 +29,20 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
   function SetupExpress(){
     //ciudata abordare, ai putea sa faci direct fara functia aia de mai sus
     const app = express();
-    const server = http.createServer(app);
-    const io = socketIO(server);
+    //const server = http.createServer(app);
 
+    const server = https.createServer({
+      key: fs.readFileSync('certificates/server.key'),
+      cert: fs.readFileSync('certificates/server.cert')
+    },app);
+    const io = socketIO(server);
+  /*
     server.listen(3000, function(){
       console.log('Server listening on port 3000');
+    });
+    */
+    server.listen(443, function(){
+      console.log('Server listening on port 443');
     });
     ConfigureExpress(app);
 
@@ -47,7 +59,6 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
     results.SetRouting(router);
     privatechat.SetRouting(router);
     profile.SetRouting(router);
-    interest.SetRouting(router);
     app.use(router);
 
   }
