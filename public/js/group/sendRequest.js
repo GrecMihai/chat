@@ -16,6 +16,7 @@ $(document).ready(function(){
   socket.on('newFriendRequest', function(friend){
     $('#reload').load(location.href + ' ' + '#reload');
     //event delegation si aici, ii bagata si aici ca sa poti sa dai accept fara sa dai refresh
+    
     $(document).on('click', '#accept_friend', function(){
       var senderId = $('#senderId').val();
       var senderName = $('#senderName').val();
@@ -24,8 +25,8 @@ $(document).ready(function(){
         url: '/group/' + room,
         type: 'POST',
         data: {
-          senderId: senderId,
-          senderName: senderName
+          fr_senderId: senderId,
+          fr_senderName: senderName
         },
         success: function(){
           //after the data is sent, we remove the request from the frontend
@@ -40,7 +41,7 @@ $(document).ready(function(){
         url: '/group/' + room,
         type: 'POST',
         data: {
-          user_Id: user_Id
+          fr_user_Id: user_Id
         },
         success: function(){
           //after the data is sent, we remove the request from the frontend
@@ -60,7 +61,7 @@ $(document).ready(function(){
       url: '/group/'+room,
       type: 'POST',
       data: {
-        receiverName: receiverName
+        fr_receiverName: receiverName
       },
       success: function(){
         //datele de sus se trimit la DB, dupa ce sunt trimise, trebuie sa emitem un nou event
@@ -82,8 +83,8 @@ $(document).ready(function(){
       url: '/group/' + room,
       type: 'POST',
       data: {
-        senderId: senderId,
-        senderName: senderName
+        fr_senderId: senderId,
+        fr_senderName: senderName
       },
       success: function(){
         //after the data is sent, we remove the request from the frontend
@@ -101,7 +102,7 @@ $(document).ready(function(){
       url: '/group/' + room,
       type: 'POST',
       data: {
-        user_Id: user_Id
+        fr_user_Id: user_Id
       },
       success: function(){
         //after the data is sent, we remove the request from the frontend

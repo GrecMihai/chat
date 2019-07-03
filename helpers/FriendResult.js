@@ -6,12 +6,12 @@ module.exports = function(async, Users, Message){
       async.parallel([
         //for receiver
         function(callback){
-          if(req.body.receiverName){
+          if(req.body.fr_receiverName){
             //update the collection for the receiver
             Users.update({
-              'username': req.body.receiverName,//look for a collection that has that Username
+              'username': req.body.fr_receiverName,//look for a collection that has that Username
               'request.userId': {$ne: req.user._id},//ne inseamna not equal, _id e id'ul celui ce trimite, prin asta verifica ca nu s'a trimis deja cerere sau ca ei nu sunt deja prieteni
-              'friendsList.fiendId' : {$ne: req.user._id},//aici verifica sa nu fie prieteni de fapt
+              'friendsList.friendId' : {$ne: req.user._id},//aici verifica sa nu fie prieteni de fapt
 
             },
               {
@@ -26,11 +26,11 @@ module.exports = function(async, Users, Message){
         },
         //for sender
         function(callback){
-          Users.findOne({'username':req.body.receiverName}, (err, user) => {
+          Users.findOne({'username':req.body.fr_receiverName}, (err, user) => {
             if(user){
               Users.update({
                 'username': req.user.username,//verificam sa fie userul care trebuie
-                'sentRequest.username': {$ne: req.body.receiverName}//sa verificam ca nu s'a tirmis deja o cerere si baiatu celalant nu a acceptat'o
+                'sentRequest.username': {$ne: req.body.fr_receiverName}//sa verificam ca nu s'a tirmis deja o cerere si baiatu celalant nu a acceptat'o
               },{//push the data here
                 $push: {sentRequest: {
                   user: user._id
@@ -51,17 +51,16 @@ module.exports = function(async, Users, Message){
         //CLICK ON ACCEPT
         //update the document for the receiver request
         function(callback){
-                    if(req.body.senderId){
+                    if(req.body.fr_senderId){
                         Users.update({
                             '_id': req.user._id,
-                            'friendsList.friendId': {$ne: req.body.senderId}
+                            'friendsList.friendId': {$ne: req.body.fr_senderId}
                         }, {
                             $push: {friendsList: {
-                                friendId: req.body.senderId
+                                friendId: req.body.fr_senderId
                             }},
                             $pull: {request: {
-                                userId: req.body.senderId,
-                                username: req.body.senderName
+                                userId: req.body.fr_senderId,
                             }},
                             $inc: {totalRequest: -1}
                         }, (err, count) => {
@@ -72,32 +71,32 @@ module.exports = function(async, Users, Message){
 
                 //This function is updated for the sender of the friend request when it is accepted by the receiver
                 function(callback){
-                    if(req.body.senderId){
+                    if(req.body.fr_senderId){
                         Users.update({
-                            '_id': req.body.senderId,
+                            '_id': req.body.fr_senderId,
                             'friendsList.friendId': {$ne: req.user._id}
                         }, {
                             $push: {friendsList: {
                                 friendId: req.user._id
                             }},
                             $pull: {sentRequest: {
-                                username: req.user.username
+                                user: req.user._id
                             }},
                         }, (err, count) => {
-                            callback(err, count);
+                          callback(err, count);
                         });
                     }
                 },
         //CANCEL THE REQUEST
         //receiver
         function(callback){
-          if(req.body.user_Id){
+          if(req.body.fr_user_Id){
             Users.update({
               '_id': req.user._id,
-              'request.userId' : {$eq: req.body.user_Id}
+              'request.userId' : {$eq: req.body.fr_user_Id}
             },{//delete the request
               $pull: {request: {
-                userId: req.body.user_Id
+                userId: req.body.fr_user_Id
               }},
               $inc: {totalRequest: -1}
             }, (err, count) => {
@@ -107,9 +106,9 @@ module.exports = function(async, Users, Message){
         },
         //sender
         function(callback){
-          if(req.body.user_Id){
+          if(req.body.fr_user_Id){
             Users.update({
-              '_id': req.body.user_Id,
+              '_id': req.body.fr_user_Id,
               'sentRequest.user' : {$eq: req.user._id}
             },{//delete the request
               $pull: {sentRequest: {
