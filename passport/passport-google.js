@@ -27,7 +27,6 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
   //token will contain a facebook token that will be generated, and profile will contain all the infos
 }, (req, accessToken, refreshToken, profile, done) => {
-
   User.findOne({google:profile.id}, (err, user) => {
     //network error, connection error or something like that
     if(err){

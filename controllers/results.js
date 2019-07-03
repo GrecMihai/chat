@@ -3,8 +3,7 @@ module.exports = function(async, Club, Users, Message, _){
     SetRouting: function(router){
       router.get('/results', this.getResults);
       router.post('/results', this.postResults);
-      router.get('/friends', this.viewFriends);
-      router.post('/friends', this.viewFriends);
+      router.get('/friends', this.getFriendsPage);
     },
     getResults: function(req, res){
       if(typeof req.user !== "undefined"){
@@ -15,10 +14,7 @@ module.exports = function(async, Club, Users, Message, _){
       }
     },
     postResults: function(req, res){
-      if(/^\S*$/.test(req.body.country) === false){
-        res.redirect('/home');
-      }
-      else if(req.body.country.length > 0){
+      if(req.body.country.length > 0){
       async.parallel([
         function(callback){
           const regex = new RegExp((req.body.country), 'gi');
@@ -183,7 +179,7 @@ module.exports = function(async, Club, Users, Message, _){
      }
     }
     },
-    viewFriends: function(req, res){
+    getFriendsPage: function(req, res){
       if(typeof req.user !== "undefined"){
         async.parallel([
           function(callback){

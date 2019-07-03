@@ -29,7 +29,7 @@
                                 <div class="item col-md-3">
                                     <a style="text-decoration:none" href="/group/<%= val2.name%>">
                                       <div class="thumbnail">
-                                         <img src= "https://grecmihaibucket.s3.amazonaws.com/<%= val2.image%>" alt="">
+                                         <img src= "https://grecmihaiusersbucket.s3.amazonaws.com/<%= val2.image%>" alt="">
                                           <div class="caption">
                                               <h4>
                                                 <%= val2.name%> (<%= val2.fans.length %>)
@@ -45,9 +45,17 @@
                                                   <div class="col-xs-12 col-md-6">
                                                     <input type="hidden" name="id" id="id" value="<%= val2._id %>">
                                                     <input type="hidden" name="clubName" id="clubName" value="<%= val2.name %>">
+                                                    <% var isFan = false %>
+
+                                                    <% _.forEach(val2.fans, function(val3){%>
+                                                    <% if(JSON.stringify(val3.user) === JSON.stringify(user._id)){%>
+                                                    <% isFan = true %>
+                                                    <% }})%>
+                                                    <% if(isFan === false){ %>
                                                       <button class="btn add-fav">
                                                           Add To Favorite
                                                       </button>
+                                                    <% }%>
                                                   </div>
                                               </div>
                                           </div>

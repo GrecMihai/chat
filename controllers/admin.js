@@ -9,6 +9,7 @@ module.exports = function(formidable, Club, aws){
         router.post('/dashboard', this.adminPostPage);
       },
 
+
       adminPage: function(req, res){
         res.render('admin/dashboard');
       },

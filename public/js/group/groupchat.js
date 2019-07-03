@@ -75,7 +75,12 @@ $(document).ready(function(){
       chat.scrollTop = chat.scrollHeight;
   });
 
-
+  $('#msg').keypress(function (e){
+    var key = e.which;
+    if(key == 13){
+      $('#message-form').submit();
+    }
+  });
   //jquery, getting the id of the form and listen on submit on that form
   $('#message-form').on('submit', function(e){
 

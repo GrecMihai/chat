@@ -35,7 +35,7 @@
                                     <div class="card">
                                         <div class="front">
                                             <br><br>
-                                            <img src="https://grecmihaibucket.s3.amazonaws.com/<%=user.userImage%>" class="img-responsive img-user" alt="">
+                                            <img src="https://grecmihaiusersbucket.s3.amazonaws.com/<%=user.userImage%>" class="img-responsive img-user" alt="">
                                             <div class="content">
                                                 <div class="main">
                                                     <h3 class="name"><%= user.username %></h3>
@@ -115,7 +115,7 @@
                                   <% if(val.name === groupName.replace(/-/g, " ")){%>
                                   <li class="left">
                                     <span class="chat-img1 pull-left">
-                                      <img src="https://grecmihaibucket.s3.amazonaws.com/<%= val.sender.userImage %>" class="img-circle" alt="">
+                                      <img src="https://grecmihaiusersbucket.s3.amazonaws.com/<%= val.sender.userImage %>" class="img-circle" alt="">
                                     </span>
                                     <div class="chat-body1">
                                       <span class="chat-name"><%= val.sender.username %></span>
@@ -131,7 +131,7 @@
                                 <script id="message-template" type="text/template">
                                   <li class="left">
                                     <span class="chat-img1 pull-left">
-                                      <img src="https://grecmihaibucket.s3.amazonaws.com/{{userImage}}" class="img-circle" alt="">
+                                      <img src="https://grecmihaiusersbucket.s3.amazonaws.com/{{userImage}}" class="img-circle" alt="">
                                     </span>
                                     <div class="chat-body1">
                                       <span class="chat-name">{{sender}}</span>

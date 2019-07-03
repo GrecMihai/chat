@@ -2,7 +2,7 @@ module.exports = function(async, Users, Message, FriendResult){
   return {
     SetRouting: function(router){
       router.get('/chat/:name', this.getchatPage);
-      router.post('/chat/:name', this.chatPostPage);
+      router.post('/chat/:name', this.postChatPage);
     },
     getchatPage: function(req, res){
       //here, the user enter a conversations, so in that moment the messages where he is the receiver must be with isRead = true
@@ -106,7 +106,7 @@ module.exports = function(async, Users, Message, FriendResult){
         res.render('error');
       }
     },
-    chatPostPage: function(req, res, next){
+    postChatPage: function(req, res, next){
       const params = req.params.name.split('.');
       const nameParams = params[0].replace(/-/g, " ");//this is the receiver name
       const nameRegex = new RegExp("^"+nameParams.toLowerCase(), "i");

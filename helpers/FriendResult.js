@@ -51,44 +51,43 @@ module.exports = function(async, Users, Message){
         //CLICK ON ACCEPT
         //update the document for the receiver request
         function(callback){
-          if(req.body.senderId){
-            Users.update({
-              '_id': req.user._id,
-              'friendsList.friendId' : {$ne: req.body.senderId},
-              '_id': {$ne: req.body.senderId}
-            },{//add to the friends list
-              $push: {friendsList: {
-                friendId: req.body.senderId,
-              }},//delete the request
-              $pull: {request: {
-                userId: req.body.senderId,
-              }},//decrement the totalRequest
-              $inc: {totalRequest: -1}
-            }, (err, count) => {
-              callback(err, count);
-            });
-          }
-        },
-        //update the document for the sender request
-        function(callback){
-          if(req.body.senderId){
-            Users.update({
-              '_id': req.body.senderId,
-              'friendsList.friendId' : {$ne: req.user._id},
-              '_id': {$ne: req.user._id}
-            },{//add to the friends list
-              $push: {friendsList: {
-                friendId: req.user._id,
-              }},//delete the request
-              $pull: {sentRequest: {
-                user: req.user._id
-              }}
-            }, (err, count) => {
-              //console.log(count);
-              callback(err, count);
-            });
-          }
-        },
+                    if(req.body.senderId){
+                        Users.update({
+                            '_id': req.user._id,
+                            'friendsList.friendId': {$ne: req.body.senderId}
+                        }, {
+                            $push: {friendsList: {
+                                friendId: req.body.senderId
+                            }},
+                            $pull: {request: {
+                                userId: req.body.senderId,
+                                username: req.body.senderName
+                            }},
+                            $inc: {totalRequest: -1}
+                        }, (err, count) => {
+                            callback(err, count);
+                        });
+                    }
+                },
+
+                //This function is updated for the sender of the friend request when it is accepted by the receiver
+                function(callback){
+                    if(req.body.senderId){
+                        Users.update({
+                            '_id': req.body.senderId,
+                            'friendsList.friendId': {$ne: req.user._id}
+                        }, {
+                            $push: {friendsList: {
+                                friendId: req.user._id
+                            }},
+                            $pull: {sentRequest: {
+                                username: req.user.username
+                            }},
+                        }, (err, count) => {
+                            callback(err, count);
+                        });
+                    }
+                },
         //CANCEL THE REQUEST
         //receiver
         function(callback){

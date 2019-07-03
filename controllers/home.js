@@ -2,13 +2,13 @@
  module.exports = function(_, async, Club, Users, Message, FriendResult){
    return {
      SetRouting: function(router){
-       router.get('/home', this.homePage);
+       router.get('/home', this.getHomePage);
        router.post('/home', this.postHomePage);
 
        router.get('/logout', this.logout);
      },
 
-     homePage: function(req, res){
+     getHomePage: function(req, res){
        if(typeof req.user !== "undefined"){
          //this allows each function to run in parallel
          async.parallel([

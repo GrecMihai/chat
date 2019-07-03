@@ -13,13 +13,14 @@ const S0 = new AWS.S3({});//create a new instance of s3 bucket
 const upload = multer({//ca la vesna
   storage: multerS3({
     s3: S0,
-    bucket: 'grecmihaibucket',
+    bucket: 'grecmihaiusersbucket',
     acl: 'public-read',//access control list, manage access to your bucket
     metadata(req, file, cb){
       cb(null, {fieldName: file.fieldname});
     },
     key(req, file, cb){
-      cb(null, file.originalname);
+      var ext = file.originalname.split('.');
+      cb(null, req.user.username + '.' + ext[ext.length - 1]);
     }
 
   })

@@ -1,15 +1,15 @@
 const bcrypt = require('bcrypt-nodejs');
 var msg = [];
 var seen = true;
-module.exports = function(async, Users, Message, aws, formidable, FriendResult){
+module.exports = function(async, Users, Message, awsUser, formidable, FriendResult){
   return {
     SetRouting: function(router){
       router.get('/settings/profile', this.getProfilePage);
-      router.get('/profile/:name', this.overviewPage);
+      router.get('/profile/:name', this.getOverviewPage);
 
       router.post('/settings/profile', this.postProfilePage);
-      router.post('/profile/:name', this.overviewPostPage);
-      router.post('/userupload', aws.Upload.any(), this.userUpload);
+      router.post('/profile/:name', this.postOverviewPage);
+      router.post('/userupload', awsUser.Upload.any(), this.userUpload);
 
       router.put('/settings/profile', this.putProfilePage);
     },
@@ -190,7 +190,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
       const form = new formidable.IncomingForm();
 
       form.on('file', (field, file) => {
-        //do nothing, the renaming is done in helpers/aws.js
+        //do nothing, the renaming is done in helpers/awsUser.js
       });
 
       form.on('error', (err) => {
@@ -202,7 +202,7 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
       });
       form.parse(req);
     },
-    overviewPage: function(req, res){
+    getOverviewPage: function(req, res){
       if(typeof req.user !== "undefined"){
         async.parallel([
           function(callback){
@@ -255,14 +255,14 @@ module.exports = function(async, Users, Message, aws, formidable, FriendResult){
             var dateB = new Date(b.body.createdAt);
             return dateB - dateA;
           });
-          res.render('user/overview', {title: 'SPORTbabble - Overview', user:req.user, data:result1, chat:result2});
+          res.render('user/overview', {title: 'SPORTbabble - Overview', user:req.user, data:req.user, chat:result2});
         });
       }
       else{
         res.render('error');
       }
     },
-    overviewPostPage: function(req, res){
+    postOverviewPage: function(req, res){
       FriendResult.PostRequest(req, res, '/profile/' + req.params.name);
     },
     putProfilePage: function(req, res){

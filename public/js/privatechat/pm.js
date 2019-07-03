@@ -39,7 +39,16 @@ socket.on('new message', function(data){
   });
   $('#messages').append(message);
   chat.scrollTop = chat.scrollHeight;
-})
+});
+  $('#msg').keypress(function (e){
+    var key = e.which;
+
+    if(key == 13){
+      $('#message-form').submit();
+      $('#send-message').click();
+    }
+
+  });
 
   $('#message_form').on('submit', function(e){
     e.preventDefault();//so that the form wont be reloaded

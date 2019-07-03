@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');//allow us to display flash messages
 const passport = require('passport');
 const socketIO = require('socket.io');
-const {Users} = require('./helpers/UsersClass');//asa se face la clase
+const {Users} = require('./helpers/Group');//asa se face la clase
 const {Global} = require('./helpers/Global');
 
 
@@ -68,7 +68,7 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
     require('./passport/passport-local');
     require('./passport/passport-facebook');
     require('./passport/passport-google');
-
+    //setting the MiddleWares
     app.use(express.static('public'));//express will make use of every static file in the public folder
     app.use(cookieParser());//allow us to save cookies in the browser
     app.set('view engine', 'ejs');
