@@ -105,7 +105,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
                     'receiverName': req.user.username
                   },
                   {
-                    'receiverName': req.body.username.replace(/./g,"");
+                    'receiverName': req.body.username.replace(/./g,"")
                   },
                   {
                     "multi": true
@@ -116,7 +116,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
                       'senderName': req.user.username
                     },
                     {
-                      'senderName': req.body.username.replace(/./g,"");
+                      'senderName': req.body.username.replace(/./g,"")
                     },
                     {
                       "multi": true
@@ -145,7 +145,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
         function(result1, callback){
           var ext = req.body.upload.split('.');
           if(!result1.userExists){
-            req.user.username = req.body.username.replace(/./g,"");
+            req.user.username = req.body.username.replace(/./g,"")
             //if the user has not changed the image, we will take the image it already is in the database
             if(req.body.upload === null || req.body.upload === ''){
               Users.update({
