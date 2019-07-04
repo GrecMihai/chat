@@ -80,7 +80,7 @@ socket.on('new message', function(data){
           message: message
         },
         success: function(){
-          $('#msg').val('');
+          //$('#msg').val('');
         }
       });
     }
