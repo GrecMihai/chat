@@ -22,8 +22,8 @@ const container = require('./container');
 container.resolve(function(users, _, admin, home, group, results, privatechat, profile){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
-  //mongoose.connect('mongodb+srv://root:root@sportbabble-iwgef.mongodb.net/test?retryWrites=true&w=majority');//added path to the database
-   mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
+  //mongoose.connect('mongodb+srv://root:root@sportbabble-iwgef.mongodb.net/test?retryWrites=true&w=majority', {useMongoClient: true});//added path to the database
+  mongoose.connect(process.env.MONGODB_URI);
 
   const app = SetupExpress();
 
@@ -84,6 +84,7 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
     app.use(validator());//validates whatever data we save on the database
     app.use(session({//allow us to save the sessions
       secret: process.env.SECRET_KEY,
+      //secret: 'my_secret_key',
       resave: true,
       saveInitialized: true,
       stroe: new MongoStore({mongooseConnection: mongoose.connection})//with this the data will be saved in the db for later reuse
