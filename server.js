@@ -30,12 +30,12 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
   function SetupExpress(){
     //ciudata abordare, ai putea sa faci direct fara functia aia de mai sus
     const app = express();
-    //const server = http.createServer(app);
-
+    const server = http.createServer(app);
+    /*
     const server = https.createServer({
       key: fs.readFileSync('certificates/server.key'),
       cert: fs.readFileSync('certificates/server.cert')
-    },app);
+    },app);*/
     const io = socketIO(server);
   /*
     server.listen(3000, function(){
