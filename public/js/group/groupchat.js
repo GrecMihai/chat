@@ -105,7 +105,7 @@ $(document).ready(function(){
           groupName: room.replace(/-/g, " "),
         },
         success: function(){
-          $('#msg').val('');
+          //$('#msg').val('');
         }
       })
     }
