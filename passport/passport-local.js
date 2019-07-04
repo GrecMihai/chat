@@ -46,7 +46,7 @@ passport.use('local.signup', new LocalStrategy({
       }
       //save the data in the DB
       const newUser = new User();
-      newUser.username = req.body.username.replace(/./g, "");
+      newUser.username = req.body.username.split('.').join("");
       newUser.email = req.body.email;
       newUser.password = newUser.encryptPassword(req.body.password);
       newUser.userImage = "default.png";
