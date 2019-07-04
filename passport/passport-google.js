@@ -22,7 +22,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://localhost:443/auth/google/callback',
+  callbackURL: 'https://sportbabble.herokuapp.com/auth/google/callback',
   passReqToCallback: true
   //token will contain a facebook token that will be generated, and profile will contain all the infos
 }, (req, accessToken, refreshToken, profile, done) => {

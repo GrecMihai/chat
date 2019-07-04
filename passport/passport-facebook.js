@@ -23,7 +23,7 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FB_CLIENTID,
   clientSecret: process.env.FB_CLIENT_SECRET,
   profileFields: ['email','displayName','photos'],
-  callbackURL: 'https://localhost:443/auth/facebook/callback',
+  callbackURL: 'https://sportbabble.herokuapp.com/auth/facebook/callback',
   passReqToCallback: true
   //token will contain a facebook token that will be generated, and profile will contain all the infos
 }, (req, token, refreshToken, profile, done) => {
