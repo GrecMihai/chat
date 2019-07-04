@@ -23,7 +23,7 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
 
   mongoose.Promise = global.Promise;//require for mongoose to work
   //mongoose.connect('mongodb+srv://root:root@sportbabble-iwgef.mongodb.net/test?retryWrites=true&w=majority');//added path to the database
-   mongoose.connect(process.env.MONGODB_URI);
+   mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
 
   const app = SetupExpress();
 
