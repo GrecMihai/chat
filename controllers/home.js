@@ -20,11 +20,11 @@
            },
            //to aggregate DB based on sport
            function(callback){
-             Club.aggregate({
+             Club.aggregate([{
                $group: {
                  _id: "$sport"
                }
-             }, (err, newResult) => {
+             }], (err, newResult) => {
                callback(err, newResult);
              });
            },
@@ -39,7 +39,7 @@
            },
            function(callback){
              const nameRegex = new RegExp("^"+req.user.username.toLowerCase(), "i");
-             Message.aggregate(
+             Message.aggregate([
                {$match:{$or:[{'senderName':nameRegex},
                {'receiverName':nameRegex}]}},//ia toate mesajele in care apare senderul
                {$sort:{'createdAt':-1}},//le sorteaza in ordine descrescatoare dupa data
@@ -59,7 +59,7 @@
                    }
                  }, "body":{$first:"$$ROOT"}
                  }
-               }, function(err, newResult){
+               }], function(err, newResult){
                  //callback(err, newResult);
                  const arr = [
                    {path:'body.sender', model: 'User'},

@@ -22,7 +22,8 @@ const container = require('./container');
 container.resolve(function(users, _, admin, home, group, results, privatechat, profile){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
-  mongoose.connect('mongodb://localhost/chat');//added path to the database
+  //mongoose.connect('mongodb+srv://root:root@sportbabble-iwgef.mongodb.net/test?retryWrites=true&w=majority');//added path to the database
+   mongoose.connect(process.env.MONGODB_URI);
 
   const app = SetupExpress();
 
@@ -41,8 +42,8 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
       console.log('Server listening on port 3000');
     });
     */
-    server.listen(443, function(){
-      console.log('Server listening on port 443');
+    server.listen(process.env.PORT || 443, function(){
+      //console.log('Server listening on port 443');
     });
     ConfigureExpress(app);
 
@@ -61,6 +62,10 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
     profile.SetRouting(router);
     app.use(router);
 
+    app.use(function(req, res){
+      res.render('404');
+    })
+
   }
   //add the MiddleWares
   function ConfigureExpress(app){
@@ -78,7 +83,7 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
 
     app.use(validator());//validates whatever data we save on the database
     app.use(session({//allow us to save the sessions
-      secret: 'secretKey',
+      secret: process.env.SECRET_KEY,
       resave: true,
       saveInitialized: true,
       stroe: new MongoStore({mongooseConnection: mongoose.connection})//with this the data will be saved in the db for later reuse

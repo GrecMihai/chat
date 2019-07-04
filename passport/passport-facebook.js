@@ -21,8 +21,8 @@ passport.deserializeUser((id, done) => {
 
 //add passport middleware that will deal with sign up
 passport.use(new FacebookStrategy({
-  clientID: secret.facebook.clientID,
-  clientSecret: secret.facebook.clientSecret,
+  clientID: process.env.FB_CLIENTID,
+  clientSecret: process.env.FB_CLIENT_SECRET,
   profileFields: ['email','displayName','photos'],
   callbackURL: 'https://localhost:443/auth/facebook/callback',
   passReqToCallback: true

@@ -21,8 +21,8 @@ passport.deserializeUser((id, done) => {
 
 //add passport middleware that will deal with sign up
 passport.use(new GoogleStrategy({
-  clientID: secret.google.clientID,
-  clientSecret: secret.google.clientSecret,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: 'https://localhost:443/auth/google/callback',
   passReqToCallback: true
   //token will contain a facebook token that will be generated, and profile will contain all the infos
