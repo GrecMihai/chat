@@ -3,7 +3,6 @@
 const passport = require('passport');
 const User = require('../models/user');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const secret = require('../secret/secretFile');
 
 //functie ce ia ID'ul unui user si il salveaza in sesiune
 passport.serializeUser((user, done) => {
