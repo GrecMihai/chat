@@ -4,7 +4,7 @@ module.exports = function(formidable, Club, aws){
     return {
       SetRouting: function(router){
         router.get('/dashboard', this.getAdminPage);
-
+        router.get('/privacy', this.getPrivacy);
         router.post('/uploadFile',aws.Upload.any(), this.uploadFile);//any() so you can upload any type of files
         router.post('/dashboard', this.postAdminPage);
       },
@@ -13,6 +13,9 @@ module.exports = function(formidable, Club, aws){
       getAdminPage: function(req, res){
         res.render('admin/dashboard');
       },
+      getPrivacy: function(req, res){
+        res.render('privacy');
+      }
       postAdminPage: function(req, res){
         const newClub = new Club();
         newClub.name = req.body.club;//le ia din ceva atribut(name) din ejs
