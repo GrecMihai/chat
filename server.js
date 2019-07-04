@@ -42,8 +42,8 @@ container.resolve(function(users, _, admin, home, group, results, privatechat, p
       console.log('Server listening on port 3000');
     });
     */
-    server.listen(process.env.PORT || 443, function(){
-      //console.log('Server listening on port 443');
+    server.listen(process.env.PORT || 3000, function(){
+      console.log('Server listening on port 3000');
     });
     ConfigureExpress(app);
 
