@@ -15,7 +15,7 @@ module.exports = function(formidable, Club, aws){
       },
       getPrivacy: function(req, res){
         res.render('privacy');
-      }
+      },
       postAdminPage: function(req, res){
         const newClub = new Club();
         newClub.name = req.body.club;//le ia din ceva atribut(name) din ejs
