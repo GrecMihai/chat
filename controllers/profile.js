@@ -105,7 +105,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
                     'receiverName': req.user.username
                   },
                   {
-                    'receiverName': req.body.username
+                    'receiverName': req.body.username.replace(/./g,"");
                   },
                   {
                     "multi": true
@@ -116,7 +116,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
                       'senderName': req.user.username
                     },
                     {
-                      'senderName': req.body.username
+                      'senderName': req.body.username.replace(/./g,"");
                     },
                     {
                       "multi": true
@@ -145,14 +145,14 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
         function(result1, callback){
           var ext = req.body.upload.split('.');
           if(!result1.userExists){
-            req.user.username = req.body.username;
+            req.user.username = req.body.username.replace(/./g,"");
             //if the user has not changed the image, we will take the image it already is in the database
             if(req.body.upload === null || req.body.upload === ''){
               Users.update({
                 '_id':req.user._id
               },
               {
-                username: req.body.username,
+                username: req.body.username.replace(/./g,""),
                 mantra: req.body.mantra,
                 gender: req.body.gender,
                 country: req.body.country
@@ -167,7 +167,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
                 '_id':req.user._id
               },
               {
-                username: req.body.username,
+                username: req.body.username.replace(/./g,""),
                 mantra: req.body.mantra,
                 gender: req.body.gender,
                 country: req.body.country,
@@ -255,7 +255,7 @@ module.exports = function(async, Users, Message, awsUser, formidable, FriendResu
             var dateB = new Date(b.body.createdAt);
             return dateB - dateA;
           });
-          res.render('user/overview', {title: 'SPORTbabble - Overview', user:req.user, data:req.user, chat:result2});
+          res.render('user/overview', {title: 'SPORTbabble - Overview', user:req.user, data:result1, chat:result2});
         });
       }
       else{
