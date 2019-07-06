@@ -22,13 +22,11 @@ const container = require('./container');
 container.resolve(function(users, _, admin, home, group, results, privatechat, profile){
 
   mongoose.Promise = global.Promise;//require for mongoose to work
-  //mongoose.connect('mongodb+srv://root:root@sportbabble-iwgef.mongodb.net/test?retryWrites=true&w=majority', {useMongoClient: true});//added path to the database
   mongoose.connect(process.env.MONGODB_URI);
 
   const app = SetupExpress();
 
   function SetupExpress(){
-    //ciudata abordare, ai putea sa faci direct fara functia aia de mai sus
     const app = express();
     const server = http.createServer(app);
     /*

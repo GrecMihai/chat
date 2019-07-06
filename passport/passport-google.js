@@ -41,11 +41,17 @@ passport.use(new GoogleStrategy({
     newUser.userImage = "default.png";
     newUser.email = profile.emails[0].value;
 
-    newUser.save((err) => {
+    User.findOne({'username': profile.displayName}, (err, user1) =>{
       if(err){
         return done(err);
       }
-      return done(null, newUser);
+      //if the username already exist
+      if(user1){
+        newUser.username = 'babbler';
+      }
+      newUser.save((err) => {
+        done(null, newUser);
+      });
     });
 
   });

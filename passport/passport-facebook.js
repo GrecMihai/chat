@@ -45,9 +45,20 @@ passport.use(new FacebookStrategy({
     newUser.email = profile._json.email;
     newUser.userImage = 'default.png';
     newUser.fbTokens.push({token:token});
-    newUser.save((err) => {
-      done(null, newUser);
+
+    User.findOne({'username': profile.displayName}, (err, user1) =>{
+      if(err){
+        return done(err);
+      }
+      //if the username already exist
+      if(user1){
+        newUser.username = 'babbler';
+      }
+      newUser.save((err) => {
+        done(null, newUser);
+      });
     });
+
   });
 
 }));
